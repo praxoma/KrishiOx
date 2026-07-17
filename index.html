@@ -1,165 +1,154 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GOSPOLO - आधुनिक खेती सेवाएं</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#111827">
-    <!-- Apple PWA Meta -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="GOSPOLO">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>GOSPOLO — खेती सेवाओं की अग्रिम बुकिंग | सहारनपुर</title>
+<meta name="description" content="GOSPOLO से सहारनपुर में ट्रैक्टर, रोटावेटर, हार्वेस्टिंग और अन्य खेती सेवाएँ पहले से बुक करें। WhatsApp पर तुरंत पुष्टि पाएँ।">
+<meta name="theme-color" content="#111827">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<div class="offline-banner" id="offlineBanner">आप ऑफ़लाइन हैं — कुछ जानकारी सीमित हो सकती है</div>
 
-    <!-- Top App Bar -->
-    <header class="app-bar">
-        <div class="logo-container" onclick="app.navigate('home')">
-            <span class="logo-text">GOSPOLO</span>
-            <span class="tagline">सहारनपुर कृषि सेवा</span>
+<div class="app-shell">
+  <header class="site-header" id="siteHeader"></header>
+
+  <main class="page">
+
+    <!-- HERO -->
+    <section class="hero">
+      <span class="hero-eyebrow">★ सहारनपुर की भरोसेमंद खेती सेवा</span>
+      <h1>खेती सेवाएँ, <em>समय पर</em> और आपकी सुविधा अनुसार बुक करें</h1>
+      <p>ट्रैक्टर, रोटावेटर, हार्वेस्टिंग व अन्य सेवाएँ — पहले से बुकिंग करें, WhatsApp पर पुष्टि पाएँ।</p>
+      <div class="hero-cta-row">
+        <a href="booking.html" class="btn btn-primary">सेवा बुक करें</a>
+        <a id="heroWaBtn" class="btn btn-whatsapp" style="width:52px;flex:none;padding:0;" href="#" target="_blank" rel="noopener" aria-label="WhatsApp"></a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><strong>11+</strong><span>सेवा श्रेणियाँ</span></div>
+        <div class="hero-stat"><strong>12+</strong><span>क्षेत्र कवर</span></div>
+        <div class="hero-stat"><strong>100%</strong><span>अग्रिम बुकिंग</span></div>
+      </div>
+    </section>
+
+    <!-- QUICK SERVICES -->
+    <section class="section">
+      <div class="section-head">
+        <div><span class="tag">Quick Book</span><h2>लोकप्रिय सेवाएँ</h2></div>
+        <a href="services.html" class="link-more">सभी देखें </a>
+      </div>
+      <div class="service-grid" id="quickServiceGrid"></div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="section">
+      <div class="section-head"><div><span class="tag">आसान प्रक्रिया</span><h2>कैसे काम करता है</h2></div></div>
+      <div class="card">
+        <div class="steps-list">
+          <div class="step-item">
+            <div class="step-num">1</div>
+            <div><h4>सेवा चुनें</h4><p>अपनी जरूरत की सेवा जैसे ट्रैक्टर, रोटावेटर आदि चुनें</p></div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">2</div>
+            <div><h4>गाँव व तारीख बताएं</h4><p>अपना गाँव, क्षेत्रफल और पसंदीदा तारीख भरें</p></div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">3</div>
+            <div><h4>WhatsApp पर पुष्टि करें</h4><p>एक टैप में बुकिंग विवरण WhatsApp पर भेजें</p></div>
+          </div>
+          <div class="step-item">
+            <div class="step-num">4</div>
+            <div><h4>सेवा प्राप्त करें</h4><p>तय समय पर हमारी टीम आपके खेत पर पहुँचेगी</p></div>
+          </div>
         </div>
-        <div class="offline-badge" id="offlineBadge">ऑफ़लाइन मोड (Offline)</div>
-    </header>
+      </div>
+    </section>
 
-    <!-- Main View Container -->
-    <main id="appContent">
+    <!-- TRUST -->
+    <section class="section">
+      <div class="trust-row">
+        <div class="trust-item"><span>समय पर सेवा</span></div>
+        <div class="trust-item"><span>उचित मूल्य</span></div>
+        <div class="trust-item"><span>भरोसेमंद पार्टनर</span></div>
+      </div>
+    </section>
 
-        <!-- HOME VIEW -->
-        <section id="view-home" class="view active">
-            <div class="hero-card">
-                <h1>उन्नत कृषि सेवाएं, अब आपके शेड्यूल पर</h1>
-                <p>बिना किसी एडवांस पेमेंट के अपनी खेती की बुकिंग सीधे व्हाट्सएप पर कन्फर्म करें।</p>
-                <button class="btn btn-primary" onclick="app.navigate('services')">सेवाएं चुनें / Book Service →</button>
-            </div>
+    <!-- TESTIMONIALS -->
+    <section class="section">
+      <div class="section-head"><div><span class="tag">किसानों की राय</span><h2>हमारे किसान क्या कहते हैं</h2></div></div>
+      <div class="scroll-row" id="testimonialRow"></div>
+    </section>
 
-            <div class="section-title-container">
-                <h2>मुख्य सेवाएं (Core Services)</h2>
-                <span class="link-action" onclick="app.navigate('services')">सभी देखें</span>
-            </div>
-            
-            <div class="grid grid-2" id="featuredServices">
-                <!-- Injected via JS -->
-            </div>
+    <!-- CTA BANNER -->
+    <section class="section">
+      <div class="card-dark text-center">
+        <h2 style="font-size:18px;margin-bottom:8px;">अगली फसल के लिए अभी बुकिंग करें</h2>
+        <p style="font-size:13px;color:var(--text-on-dark-muted);margin-bottom:20px;">सीमित स्लॉट उपलब्ध — देरी से बचें</p>
+        <a href="booking.html" class="btn btn-primary">अभी बुक करें</a>
+      </div>
+    </section>
 
-            <div class="promo-banner" onclick="app.navigate('partners')">
-                <h3>हमारे पार्टनर बनें (Become a Partner)</h3>
-                <p>यदि आपके पास ट्रैक्टर या कृषि मशीनरी है, तो हमारे साथ जुड़कर कमाई बढ़ाएं।</p>
-            </div>
-        </section>
+  </main>
 
-        <!-- SERVICES VIEW -->
-        <section id="view-services" class="view">
-            <h2>कृषि सेवाओं की सूची</h2>
-            <p class="subtitle">अपनी जरूरत की सेवा पर टैप करें और बुकिंग आगे बढ़ाएं</p>
-            <div class="grid grid-2" id="allServicesList">
-                <!-- Injected via JS -->
-            </div>
-        </section>
+  <footer class="site-footer">
+    <div class="footer-links" id="footerLinks"></div>
+    <strong>GOSPOLO</strong> — खेती की सेवाएँ, समय पर बुकिंग<br>
+    © 2026 GOSPOLO. सहारनपुर, उत्तर प्रदेश में सेवा उपलब्ध।
+  </footer>
 
-        <!-- BOOKING VIEW -->
-        <section id="view-booking" class="view">
-            <div class="booking-header">
-                <button class="btn-back" onclick="app.navigate('services')">← वापस</button>
-                <h2>बुक करें: <span id="selectedServiceName" class="highlight">सेवा</span></h2>
-            </div>
+  <nav class="bottom-nav" id="bottomNav"></nav>
+</div>
 
-            <form id="bookingForm" onsubmit="app.handleBookingSubmit(event)">
-                <div class="form-group">
-                    <label>आपका गाँव (Select Village) *</label>
-                    <div class="chips-container" id="villageChips">
-                        <!-- Chips injected via JS -->
-                    </div>
-                </div>
+<script src="js/config.js"></script>
+<script src="js/icons.js"></script>
+<script src="js/main.js"></script>
+<script>
+  // Hero icon fills (done post-load since gospoloIcon() is JS, not usable in raw HTML attrs)
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector(".hero-eyebrow").innerHTML = gospoloIcon("star") + " सहारनपुर की भरोसेमंद खेती सेवा";
+    document.querySelector(".link-more").innerHTML = "सभी देखें " + gospoloIcon("chevronRight");
 
-                <div class="form-group">
-                    <label for="inputArea">कुल जमीन माप (Area in Acres) *</label>
-                    <div class="input-with-unit">
-                        <input type="number" id="inputArea" required min="0.5" step="0.5" placeholder="उदाहरण: 2.5">
-                        <span class="unit-label">Acre (एकड़)</span>
-                    </div>
-                </div>
+    const trustItems = document.querySelectorAll(".trust-item");
+    trustItems[0].innerHTML = gospoloIcon("clock") + "<span>समय पर सेवा</span>";
+    trustItems[1].innerHTML = gospoloIcon("rupee") + "<span>उचित मूल्य</span>";
+    trustItems[2].innerHTML = gospoloIcon("shield") + "<span>भरोसेमंद पार्टनर</span>";
 
-                <div class="form-group">
-                    <label for="inputDate">काम की तारीख (Schedule Date) *</label>
-                    <input type="date" id="inputDate" required>
-                </div>
+    const heroWa = document.getElementById("heroWaBtn");
+    heroWa.href = buildWhatsAppLink("नमस्ते GOSPOLO, मुझे खेती सेवा बुक करनी है।");
+    heroWa.innerHTML = gospoloIcon("whatsapp");
 
-                <div class="form-group">
-                    <label for="inputRemarks">अन्य जानकारी (Any Instructions)</label>
-                    <textarea id="inputRemarks" rows="2" placeholder="कोई विशेष निर्देश या लैंडमार्क यहाँ लिखें..."></textarea>
-                </div>
+    // Quick service grid — first 6 services
+    const grid = document.getElementById("quickServiceGrid");
+    let gridHtml = "";
+    GOSPOLO_SERVICES.slice(0, 6).forEach(function (s) {
+      gridHtml += '<a class="service-card" href="booking.html?service=' + s.id + '">' +
+        '<span class="icon-wrap">' + gospoloIcon(s.icon) + "</span>" +
+        '<span class="s-name-hi">' + s.nameHi + "</span>" +
+        '<span class="s-name-en">' + s.nameEn + "</span>" +
+        "</a>";
+    });
+    grid.innerHTML = gridHtml;
 
-                <button type="submit" class="btn btn-whatsapp">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397 0 11.944 0c3.176.001 6.16 1.238 8.403 3.484 2.243 2.246 3.479 5.23 3.477 8.407-.003 6.549-5.34 11.896-11.886 11.896-.001 0-.002 0-.003 0-2.001-.001-3.968-.507-5.713-1.464L0 24zm6.066-3.447c1.652.98 3.516 1.497 5.424 1.498h.005c5.447 0 9.877-4.426 9.88-9.874.001-2.639-1.023-5.121-2.883-6.983C16.687 3.332 14.208 2.3 11.571 2.3c-5.451 0-9.88 4.426-9.883 9.875-.001 1.97.513 3.894 1.49 5.61l-.964 3.52 3.606-.946zm11.381-4.721c-.301-.151-1.784-.88-2.056-.979-.273-.099-.472-.148-.671.151-.198.298-.766.979-.939 1.178-.173.199-.347.223-.648.073-.302-.151-1.272-.469-2.423-1.496-.895-.798-1.5-1.784-1.676-2.085-.176-.301-.019-.464.132-.613.135-.134.301-.352.451-.528.151-.176.201-.301.302-.503.101-.201.05-.377-.025-.528-.075-.151-.671-1.617-.92-2.214-.242-.58-.488-.501-.671-.51l-.571-.01c-.199 0-.522.075-.796.377-.273.301-1.043 1.021-1.043 2.491 0 1.471 1.069 2.891 1.218 3.091.149.2 2.105 3.214 5.099 4.506.712.308 1.268.493 1.701.631.716.227 1.368.195 1.883.118.574-.085 1.784-.73 2.032-1.435.248-.704.248-1.308.174-1.436-.074-.128-.272-.201-.573-.352z"/></svg>
-                    व्हाट्सएप पर बुकिंग भेजें (Confirm on WhatsApp)
-                </button>
-            </form>
-        </section>
-
-        <!-- PARTNERS VIEW -->
-        <section id="view-partners" class="view">
-            <h2>हमारे साथ जुड़ें (Partner Registration)</h2>
-            <p class="subtitle">क्या आपके पास कृषि मशीनरी या ट्रैक्टर है? आज ही कमाई शुरू करें।</p>
-            <div class="card bg-charcoal text-ivory">
-                <h4>साझेदारी के लाभ:</h4>
-                <ul>
-                    <li>नियमित बुकिंग की गारंटी</li>
-                    <li>कोई छुपी हुई फीस नहीं</li>
-                    <li>गाँव के पास ही काम की सुविधा</li>
-                </ul>
-                <button class="btn btn-whatsapp" onclick="app.sendPartnerInquiry()">
-                    व्हाट्सएप पार्टनर इन्क्वायरी शुरू करें
-                </button>
-            </div>
-        </section>
-
-        <!-- ABOUT VIEW -->
-        <section id="view-about" class="view">
-            <h2>हमारे बारे में (About GOSPOLO)</h2>
-            <div class="card">
-                <p><strong>GOSPOLO</strong> सहारनपुर (उत्तर प्रदेश) के किसान भाइयों के लिए समर्पित एक अत्याधुनिक और प्रीमियम शेड्यूलिंग प्लेटफॉर्म है।</p>
-                <p>हमारा उद्देश्य पारंपरिक कृषि और आधुनिक तकनीक का मेल कराकर, सही समय पर उन्नत उपकरणों की उपलब्धता सुनिश्चित करना है। यह कोई रेंटल मार्केटप्लेस नहीं है, बल्कि एक समयबद्ध, विश्वसनीय कृषि सेवा नेटवर्क है।</p>
-            </div>
-        </section>
-
-        <!-- CONTACT VIEW -->
-        <section id="view-contact" class="view">
-            <h2>संपर्क करें (Contact Us)</h2>
-            <div class="card text-center">
-                <p>मुख्य कार्यालय: सहारनपुर, उत्तर प्रदेश</p>
-                <p>किसी भी सहायता या प्रश्न के लिए हमें नीचे दिए बटन द्वारा मैसेज भेजें।</p>
-                <button class="btn btn-primary" onclick="window.open('https://wa.me/919999999999?text=Hello%20Gospolo%20Support', '_blank')">💬 कस्टमर केयर सपोर्ट</button>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Bottom Navigation Bar -->
-    <nav class="bottom-nav">
-        <button class="nav-item active" data-view="home" onclick="app.navigate('home')">
-            <span class="icon">🏠</span>
-            <span class="nav-label">होम</span>
-        </button>
-        <button class="nav-item" data-view="services" onclick="app.navigate('services')">
-            <span class="icon">🚜</span>
-            <span class="nav-label">सेवाएं</span>
-        </button>
-        <button class="nav-item" data-view="partners" onclick="app.navigate('partners')">
-            <span class="icon">🤝</span>
-            <span class="nav-label">पार्टनर</span>
-        </button>
-        <button class="nav-item" data-view="about" onclick="app.navigate('about')">
-            <span class="icon">ℹ️</span>
-            <span class="nav-label">परिचय</span>
-        </button>
-        <button class="nav-item" data-view="contact" onclick="app.navigate('contact')">
-            <span class="icon">📞</span>
-            <span class="nav-label">संपर्क</span>
-        </button>
-    </nav>
-
-    <script src="app.js"></script>
+    // Testimonials
+    const testimonials = [
+      { name: "सुरेश कुमार", place: "देवबंद", text: "समय पर ट्रैक्टर मिल गया, फसल की बुवाई में देरी नहीं हुई।", initial: "सु" },
+      { name: "रामपाल सिंह", place: "गंगोह", text: "WhatsApp पर बुकिंग करना बहुत आसान रहा, कोई परेशानी नहीं हुई।", initial: "रा" },
+      { name: "विनोद त्यागी", place: "नकुड़", text: "हार्वेस्टिंग सेवा बहुत अच्छी रही, दाम भी उचित थे।", initial: "वि" }
+    ];
+    const row = document.getElementById("testimonialRow");
+    let rowHtml = "";
+    testimonials.forEach(function (t) {
+      rowHtml += '<div class="testimonial-card"><p>“' + t.text + '”</p>' +
+        '<div class="testimonial-who"><span class="avatar-circle">' + t.initial + '</span>' +
+        '<div><strong>' + t.name + '</strong><span>' + t.place + '</span></div></div></div>';
+    });
+    row.innerHTML = rowHtml;
+  });
+</script>
 </body>
 </html>

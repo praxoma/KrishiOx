@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>सभी सेवाएँ — GOSPOLO</title>
+<meta name="description" content="GOSPOLO पर उपलब्ध सभी खेती सेवाएँ — ट्रैक्टर, रोटावेटर, हार्वेस्टिंग, सिंचाई, परिवहन व अधिक।">
+<meta name="theme-color" content="#111827">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="offline-banner" id="offlineBanner">आप ऑफ़लाइन हैं — कुछ जानकारी सीमित हो सकती है</div>
+
+<div class="app-shell">
+  <header class="site-header" id="siteHeader"></header>
+
+  <main class="page">
+    <section class="page-hero-sm">
+      <span class="tag">Our Services</span>
+      <h1>सभी खेती सेवाएँ</h1>
+      <p>अपनी जरूरत की सेवा चुनें और तुरंत बुकिंग शुरू करें</p>
+    </section>
+
+    <section class="section" style="margin-top:20px;">
+      <div id="serviceList"></div>
+    </section>
+
+    <section class="section">
+      <div class="info-strip">
+        <span id="infoIcon"></span>
+        <p>सेवा उपलब्ध न होने पर <strong>"अन्य सेवा"</strong> चुनें और हमें WhatsApp पर अपनी आवश्यकता बताएं — हमारी टीम आपसे संपर्क करेगी।</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-links" id="footerLinks"></div>
+    <strong>GOSPOLO</strong> — खेती की सेवाएँ, समय पर बुकिंग<br>
+    © 2026 GOSPOLO. सहारनपुर, उत्तर प्रदेश में सेवा उपलब्ध।
+  </footer>
+
+  <nav class="bottom-nav" id="bottomNav"></nav>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/icons.js"></script>
+<script src="js/main.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("infoIcon").innerHTML = gospoloIcon("info");
+    const list = document.getElementById("serviceList");
+    let html = "";
+    GOSPOLO_SERVICES.forEach(function (s) {
+      html += '<a class="service-row" href="booking.html?service=' + s.id + '">' +
+        '<span class="icon-wrap">' + gospoloIcon(s.icon) + "</span>" +
+        '<div class="row-body">' +
+          '<h3>' + s.nameHi + '</h3>' +
+          '<span class="s-name-en">' + s.nameEn + '</span>' +
+          '<p>' + s.desc + '</p>' +
+        '</div>' +
+        '<span class="row-cta">' + gospoloIcon("arrowRight") + '</span>' +
+      '</a>';
+    });
+    list.innerHTML = html;
+  });
+</script>
+</body>
+</html>
