@@ -68,6 +68,35 @@ or inside a repo sub-path — no path rewriting needed.
 > **Note:** GitHub Pages serves over HTTPS, which is required for service workers and the
 > "Add to Home Screen" install prompt to function.
 
+### 🌐 Custom domain (gospolo.in)
+
+The repo root already has a `CNAME` file containing `gospolo.in`. To point the domain at GitHub Pages:
+
+1. At your domain registrar, add DNS records for the apex domain pointing to GitHub Pages:
+   - Four `A` records for `@` → `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
+   - (Optional) a `CNAME` record for `www` → `<username>.github.io`, if you also want `www.gospolo.in` to work
+2. In **Settings → Pages**, set the custom domain to `gospolo.in` and wait for DNS to verify.
+3. Enable **Enforce HTTPS** once the certificate is issued (can take a few hours after DNS propagates).
+
+All canonical URLs, `sitemap.xml`, `robots.txt`, and Open Graph tags in this project assume `https://gospolo.in/` — update them if the domain changes.
+
+---
+
+## 🔍 SEO (Saharanpur, Roorkee, Nakur, Gangoh, Bandukheri, Rampur region)
+
+Every page has a unique `<title>`, meta description, canonical URL, and Open Graph / Twitter Card
+tags naming the service area. `index.html` also carries a `Service` JSON-LD block (`areaServed` +
+full service catalogue) and `contact.html` carries `FAQPage` JSON-LD matching its visible FAQ —
+both are eligible for rich results in Google Search.
+
+- `js/config.js` → `GOSPOLO_VILLAGES` is the single source of truth for the area list (datalist
+  suggestions in the booking wizard, and the text used across About/Contact copy). Add new towns
+  there first.
+- `robots.txt` + `sitemap.xml` (repo root) list all indexable pages; `offline.html` is marked
+  `noindex` since it's just the service-worker fallback shell, not real content.
+- After the custom domain is live, add `https://gospolo.in/` in **Google Search Console**, verify
+  ownership, and submit `https://gospolo.in/sitemap.xml` so pages get crawled.
+
 ---
 
 ## ⚙️ Configuration

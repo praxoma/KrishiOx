@@ -28,7 +28,7 @@ const GOSPOLO_SERVICES = [
     nameEn: "Tractor Service",
     desc: "जुताई व अन्य खेत कार्यों के लिए ट्रैक्टर बुक करें",
     icon: "tractor",
-    unit: "एकड़ (Acre)"
+    unit: "बीघा (Bigha)"
   },
   {
     id: "rotavator",
@@ -36,7 +36,7 @@ const GOSPOLO_SERVICES = [
     nameEn: "Rotavator",
     desc: "मिट्टी भुरभुरी करने व बुवाई पूर्व तैयारी हेतु",
     icon: "rotavator",
-    unit: "एकड़ (Acre)"
+    unit: "बीघा (Bigha)"
   },
   {
     id: "cultivator",
@@ -44,7 +44,7 @@ const GOSPOLO_SERVICES = [
     nameEn: "Cultivator",
     desc: "गहरी जुताई व खरपतवार नियंत्रण के लिए",
     icon: "cultivator",
-    unit: "एकड़ (Acre)"
+    unit: "बीघा (Bigha)"
   },
   {
     id: "laser-leveller",
@@ -52,7 +52,7 @@ const GOSPOLO_SERVICES = [
     nameEn: "Laser Leveller",
     desc: "खेत को समतल कर पानी व खाद की बचत करें",
     icon: "laser",
-    unit: "एकड़ (Acre)"
+    unit: "बीघा (Bigha)"
   },
   {
     id: "harvesting",
@@ -60,7 +60,7 @@ const GOSPOLO_SERVICES = [
     nameEn: "Harvesting",
     desc: "गेहूं, धान व अन्य फसल की कटाई सेवा",
     icon: "harvest",
-    unit: "एकड़ (Acre)"
+    unit: "बीघा (Bigha)"
   },
   {
     id: "mini-loader",
@@ -92,7 +92,7 @@ const GOSPOLO_SERVICES = [
     nameEn: "Irrigation",
     desc: "पंप सेट व सिंचाई उपकरण सहायता",
     icon: "irrigation",
-    unit: "एकड़ (Acre)"
+    unit: "बीघा (Bigha)"
   },
   {
     id: "farm-labour",
@@ -114,10 +114,13 @@ const GOSPOLO_SERVICES = [
 
 // Common villages / areas around Saharanpur — shown as datalist suggestions.
 const GOSPOLO_VILLAGES = [
+  "सहारनपुर (Saharanpur)",
+  "रुड़की (Roorkee)",
   "देवबंद (Deoband)",
   "नकुड़ (Nakur)",
   "रामपुर मनिहारान (Rampur Maniharan)",
   "गंगोह (Gangoh)",
+  "बंडूखेड़ी (Bandukheri)",
   "बेहट (Behat)",
   "सरसावा (Sarsawa)",
   "नागल (Nagal)",

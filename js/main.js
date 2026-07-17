@@ -74,8 +74,30 @@
         '<span class="brand-mark">GP</span>' +
         '<span class="brand-text"><strong>GOSPOLO</strong><span>' + GOSPOLO_CONFIG.serviceArea + "</span></span>" +
       "</a>" +
-      '<a class="header-action" href="contact.html" aria-label="Help">' + gospoloIcon("bell") + "</a>";
+      '<div class="header-actions">' +
+        '<button type="button" class="header-action text-size-btn" id="textSizeBtn" aria-label="टेक्स्ट का आकार बड़ा करें">A+</button>' +
+        '<a class="header-action" href="contact.html" aria-label="Help">' + gospoloIcon("bell") + "</a>" +
+      "</div>";
   }
+
+  /* ---- Text size toggle (for low-vision users — cycles 100% / 115% / 130%) ---- */
+  const TEXT_ZOOM_LEVELS = [1, 1.15, 1.3];
+  function applyTextZoom(level) {
+    document.documentElement.style.setProperty("--text-zoom", level);
+  }
+  function initTextSize() {
+    const btn = document.getElementById("textSizeBtn");
+    if (!btn) return;
+    btn.addEventListener("click", function () {
+      const current = parseFloat(GospoloStore.get("textZoom", 1));
+      const idx = TEXT_ZOOM_LEVELS.indexOf(current);
+      const next = TEXT_ZOOM_LEVELS[(idx + 1) % TEXT_ZOOM_LEVELS.length];
+      GospoloStore.set("textZoom", next);
+      applyTextZoom(next);
+      showToast("टेक्स्ट का आकार: " + Math.round(next * 100) + "%");
+    });
+  }
+  applyTextZoom(parseFloat(GospoloStore.get("textZoom", 1)));
 
   /* ---- Floating WhatsApp button (present on every page) ---- */
   function renderFab() {
@@ -189,6 +211,7 @@
     initFaq();
     initOfflineBanner();
     initInstallButton();
+    initTextSize();
   });
 
   initServiceWorker();
