@@ -201,7 +201,13 @@ input, select, textarea { font-family: inherit; }
   border: 1px solid var(--line-on-dark);
   color: var(--text-on-dark);
 }
-.header-action svg { width: 20px; height: 20px; }
+.header-action svg { width: 20px; height: 20px; stroke: currentColor; }
+
+.header-action-call {
+  background: rgba(217, 164, 65, 0.14);
+  border-color: rgba(217, 164, 65, 0.35);
+  color: var(--gold);
+}
 
 .text-size-btn {
   font-family: inherit;

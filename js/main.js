@@ -85,7 +85,7 @@
       "</a>" +
       '<div class="header-actions">' +
         '<button type="button" class="header-action text-size-btn" id="textSizeBtn" aria-label="टेक्स्ट का आकार बड़ा करें">A+</button>' +
-        '<a class="header-action" href="contact.html" aria-label="Help">' + gospoloIcon("bell") + "</a>" +
+        '<a class="header-action header-action-call" href="tel:' + GOSPOLO_CONFIG.callNumber + '" aria-label="कॉल करें">' + gospoloIcon("phone") + "</a>" +
       "</div>";
   }
 
