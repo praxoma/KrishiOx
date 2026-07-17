@@ -121,21 +121,22 @@ const GOSPOLO_SERVICES = [
 
 // Common villages / areas around Saharanpur — shown as datalist suggestions.
 const GOSPOLO_VILLAGES = [
-  "सहारनपुर (Saharanpur)",
-  "रुड़की (Roorkee)",
-  "देवबंद (Deoband)",
-  "नकुड़ (Nakur)",
-  "रामपुर मनिहारान (Rampur Maniharan)",
-  "गंगोह (Gangoh)",
-  "बंडूखेड़ी (Bandukheri)",
-  "बेहट (Behat)",
-  "सरसावा (Sarsawa)",
-  "नागल (Nagal)",
-  "पुंवारका (Punwarka)",
-  "मुजफ्फराबाद (Muzaffarabad)",
-  "छुटमलपुर (Chutmalpur)",
-  "अंबेहटा (Ambehta)",
-  "सढौली कदीम (Sadhauli Qadim)"
+  "बांदूखेड़ी (Bandukheri)",
+  "फंदपुरी (Phandpuri)",
+  "परसौली (Parasauli)",
+  "बिजना खेड़ी (Bijna Kheri)",
+  "दैद नौर (Daid Naur)",
+  "ठाठ खेड़ी (Thath Kheri)",
+  "खजूर हेड़ी (Khazoor Heri)",
+  "चक मछेर हेड़ी (Chak Machher Heri)",
+  "मच्छड़ हेड़ी (Machhar Heri)",
+  "सुभानपुरा (Subhanpura)",
+  "मोहिउद्दीनपुर (Mohiuddinpur)",
+  "कालरी (Kalri)",
+  "बुधन माजरा (Budhan Mazra)",
+  "जजवा (Jajwa)",
+  "चौखेड़ी (Chaukheri)",
+  "जगेता नजीब (Jageta Najib)"
 ];
 
 // Persist app-wide small state in localStorage safely.
