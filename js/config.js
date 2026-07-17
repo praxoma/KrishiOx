@@ -31,7 +31,7 @@ const GOSPOLO_CONFIG = {
   // privacy.html changes in a way users should be re-notified about — the
   // consent banner in main.js re-prompts anyone whose saved consent doesn't
   // match this value, instead of silently assuming old consent still holds.
-  legalVersion: "2026-07-18",
+  legalVersion: "2026-07-18.2",
 
   // TODO before real launch: replace with a real, monitored inbox — required
   // for grievance redressal under India's DPDP Act 2023 and shown on

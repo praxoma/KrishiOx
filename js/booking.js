@@ -235,7 +235,11 @@
     phoneInput.value = state.phone;
     remarksInput.value = state.remarks;
 
-    nameInput.oninput = function () { state.name = nameInput.value.trim(); saveDraft(); };
+    nameInput.oninput = function () {
+      state.name = nameInput.value.trim();
+      saveDraft();
+      updateNextButtonState();
+    };
     phoneInput.oninput = function () {
       phoneInput.value = phoneInput.value.replace(/\D/g, "").slice(0, 10);
       state.phone = phoneInput.value;
@@ -315,7 +319,7 @@
         if (state.serviceId === "other") return state.otherDetails.trim().length > 0;
         return state.qty > 0;
       case 4: return !!state.date;
-      case 5: return state.phone.length === 0 || state.phone.length === 10;
+      case 5: return state.name.trim().length > 0 && (state.phone.length === 0 || state.phone.length === 10);
       default: return true;
     }
   }
