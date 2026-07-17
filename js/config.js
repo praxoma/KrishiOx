@@ -16,7 +16,14 @@ const GOSPOLO_CONFIG = {
   // Support hours
   supportHours: "सुबह 6 बजे – रात 9 बजे (सातों दिन)",
 
+  // --- Brand identity ---
+  // Everything JS-rendered (header, footer, toasts) reads from here, so
+  // changing the platform name only needs an edit here. Static SEO tags
+  // (<title>, meta description, canonical, Open Graph, JSON-LD, manifest.json)
+  // can't be JS-driven without hurting crawlers/link-preview bots that don't
+  // execute JavaScript — use dev/rebrand.js to update those in one command.
   appName: "GOSPOLO",
+  brandInitials: "GP",
   appTagline: "खेती की सेवाएँ, समय पर बुकिंग"
 };
 

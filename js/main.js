@@ -65,14 +65,23 @@
     }).join('<span style="opacity:.4;">•</span>');
   }
 
+  /* ---- Footer brand block (name/tagline read from config, not hardcoded per page) ---- */
+  function renderFooterBrand() {
+    const mount = document.getElementById("footerBrand");
+    if (!mount) return;
+    mount.innerHTML =
+      "<strong>" + GOSPOLO_CONFIG.appName + "</strong> — " + GOSPOLO_CONFIG.appTagline + "<br>" +
+      "© " + new Date().getFullYear() + " " + GOSPOLO_CONFIG.appName + ". " + GOSPOLO_CONFIG.serviceArea + " में सेवा उपलब्ध।";
+  }
+
   /* ---- Header ---- */
   function renderHeader() {
     const mount = document.getElementById("siteHeader");
     if (!mount) return;
     mount.innerHTML =
       '<a href="index.html" class="brand">' +
-        '<span class="brand-mark">GP</span>' +
-        '<span class="brand-text"><strong>GOSPOLO</strong><span>' + GOSPOLO_CONFIG.serviceArea + "</span></span>" +
+        '<span class="brand-mark">' + GOSPOLO_CONFIG.brandInitials + '</span>' +
+        '<span class="brand-text"><strong>' + GOSPOLO_CONFIG.appName + '</strong><span>' + GOSPOLO_CONFIG.serviceArea + "</span></span>" +
       "</a>" +
       '<div class="header-actions">' +
         '<button type="button" class="header-action text-size-btn" id="textSizeBtn" aria-label="टेक्स्ट का आकार बड़ा करें">A+</button>' +
@@ -106,7 +115,7 @@
     a.id = "globalFab";
     a.className = "fab-whatsapp";
     a.setAttribute("aria-label", "WhatsApp पर संपर्क करें");
-    a.href = buildWhatsAppLink("नमस्ते GOSPOLO, मुझे खेती सेवा के बारे में जानकारी चाहिए।");
+    a.href = buildWhatsAppLink("नमस्ते " + GOSPOLO_CONFIG.appName + ", मुझे खेती सेवा के बारे में जानकारी चाहिए।");
     a.target = "_blank";
     a.rel = "noopener";
     a.innerHTML = gospoloIcon("whatsapp");
@@ -166,14 +175,42 @@
     update();
   }
 
-  /* ---- Service Worker registration ---- */
+  /* ---- Service Worker registration + forced update delivery ----
+     There's no app store to push updates through, so a new deploy has to
+     reach already-installed PWAs on its own. sw.js calls skipWaiting() as
+     soon as a new version installs; here we detect that handover and
+     reload automatically so the farmer is never stuck on stale code.
+     The `hadController` guard stops this from firing (and reloading) on a
+     brand-new first-ever visit, where there's no real "update" happening —
+     only on a genuine version change for a returning visitor. */
   function initServiceWorker() {
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", function () {
-        navigator.serviceWorker.register("sw.js").catch(function () {
-          /* offline-first still works without SW registration succeeding */
-        });
+    if (!("serviceWorker" in navigator)) return;
+    window.addEventListener("load", function () {
+      const hadController = !!navigator.serviceWorker.controller;
+      let reloading = false;
+      navigator.serviceWorker.addEventListener("controllerchange", function () {
+        if (!hadController || reloading) return;
+        reloading = true;
+        sessionStorage.setItem("gospolo:justUpdated", "1");
+        window.location.reload();
       });
+
+      navigator.serviceWorker.register("sw.js").then(function (reg) {
+        // The browser's own update check can lag on a poor connection;
+        // re-check whenever the app comes back to the foreground.
+        document.addEventListener("visibilitychange", function () {
+          if (document.visibilityState === "visible") reg.update().catch(function () {});
+        });
+      }).catch(function () {
+        /* offline-first still works without SW registration succeeding */
+      });
+    });
+  }
+
+  function notifyIfJustUpdated() {
+    if (sessionStorage.getItem("gospolo:justUpdated")) {
+      sessionStorage.removeItem("gospolo:justUpdated");
+      showToast(GOSPOLO_CONFIG.appName + " अपडेट हो गया है ✓");
     }
   }
 
@@ -207,11 +244,13 @@
     renderHeader();
     renderBottomNav();
     renderFooterLinks();
+    renderFooterBrand();
     renderFab();
     initFaq();
     initOfflineBanner();
     initInstallButton();
     initTextSize();
+    notifyIfJustUpdated();
   });
 
   initServiceWorker();

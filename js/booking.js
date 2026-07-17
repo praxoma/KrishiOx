@@ -25,6 +25,25 @@
     return GOSPOLO_SERVICES.find(function (s) { return s.id === state.serviceId; }) || null;
   }
 
+  /* ---------------- Draft persistence (survives a dropped connection, killed tab, or reload) ---------------- */
+  const DRAFT_KEY = "bookingDraft";
+
+  function saveDraft() {
+    GospoloStore.set(DRAFT_KEY, state);
+  }
+
+  function clearDraft() {
+    GospoloStore.set(DRAFT_KEY, null);
+  }
+
+  function restoreDraftIfAny() {
+    const draft = GospoloStore.get(DRAFT_KEY, null);
+    if (!draft || typeof draft !== "object" || !draft.step || draft.step <= 1) return false;
+    Object.assign(state, draft);
+    if (state.step > TOTAL_STEPS) state.step = TOTAL_STEPS;
+    return true;
+  }
+
   /* ---------------- Progress bar ---------------- */
   function renderProgress() {
     const wrap = document.getElementById("wizardProgress");
@@ -55,6 +74,7 @@
     grid.querySelectorAll(".service-card").forEach(function (card) {
       card.addEventListener("click", function () {
         state.serviceId = card.getAttribute("data-service");
+        saveDraft();
         renderServiceGrid();
         updateNextButtonState();
         setTimeout(function () { goNext(); }, 220);
@@ -78,6 +98,7 @@
     input.value = state.village;
     input.addEventListener("input", function () {
       state.village = input.value.trim();
+      saveDraft();
       syncVillageChips();
       updateNextButtonState();
     });
@@ -87,6 +108,7 @@
         const v = chip.getAttribute("data-village");
         input.value = v;
         state.village = v;
+        saveDraft();
         syncVillageChips();
         updateNextButtonState();
       });
@@ -117,16 +139,19 @@
     otherInput.value = state.otherDetails;
     otherInput.oninput = function () {
       state.otherDetails = otherInput.value.trim();
+      saveDraft();
       updateNextButtonState();
     };
 
     document.getElementById("qtyMinus").onclick = function () {
       state.qty = Math.max(1, state.qty - 1);
       document.getElementById("qtyValue").textContent = state.qty;
+      saveDraft();
     };
     document.getElementById("qtyPlus").onclick = function () {
       state.qty = Math.min(999, state.qty + 1);
       document.getElementById("qtyValue").textContent = state.qty;
+      saveDraft();
     };
   }
 
@@ -172,6 +197,7 @@
         state.date = isoDate(d);
         state.dateLabel = formatDateHi(d);
         dateInput.value = state.date;
+        saveDraft();
         syncDateChips();
         updateNextButtonState();
       });
@@ -183,6 +209,7 @@
         const parts = state.date.split("-");
         state.dateLabel = formatDateHi(new Date(parts[0], parts[1] - 1, parts[2]));
       }
+      saveDraft();
       syncDateChips();
       updateNextButtonState();
     });
@@ -208,13 +235,14 @@
     phoneInput.value = state.phone;
     remarksInput.value = state.remarks;
 
-    nameInput.oninput = function () { state.name = nameInput.value.trim(); };
+    nameInput.oninput = function () { state.name = nameInput.value.trim(); saveDraft(); };
     phoneInput.oninput = function () {
       phoneInput.value = phoneInput.value.replace(/\D/g, "").slice(0, 10);
       state.phone = phoneInput.value;
+      saveDraft();
       updateNextButtonState();
     };
-    remarksInput.oninput = function () { state.remarks = remarksInput.value.trim(); };
+    remarksInput.oninput = function () { state.remarks = remarksInput.value.trim(); saveDraft(); };
   }
 
   /* ---------------- Step 6: Summary ---------------- */
@@ -307,6 +335,7 @@
 
   function goToStep(step) {
     state.step = Math.min(TOTAL_STEPS, Math.max(1, step));
+    saveDraft();
     renderProgress();
     showStep(state.step);
     renderCurrentStepContent();
@@ -355,6 +384,33 @@
     nextBtn.textContent = state.step === TOTAL_STEPS ? "WhatsApp पर बुक करें" : "आगे बढ़ें";
   }
 
+  function copyToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        gospoloToast("मैसेज कॉपी हो गया — नेटवर्क आने पर पेस्ट करके भेजें");
+      }).catch(function () { legacyCopy(text); });
+    } else {
+      legacyCopy(text);
+    }
+  }
+
+  function legacyCopy(text) {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try {
+      document.execCommand("copy");
+      gospoloToast("मैसेज कॉपी हो गया — नेटवर्क आने पर पेस्ट करके भेजें");
+    } catch (e) {
+      gospoloToast("कॉपी नहीं हो सका, कृपया दोबारा प्रयास करें");
+    }
+    document.body.removeChild(ta);
+  }
+
   function confirmBooking() {
     const msg = buildBookingMessage();
     const link = buildWhatsAppLink(msg);
@@ -363,6 +419,9 @@
     const waBtn = document.getElementById("successWaBtn");
     waBtn.href = link;
     waBtn.innerHTML = gospoloIcon("whatsapp") + " WhatsApp पर भेजें";
+
+    const copyBtn = document.getElementById("copyMessageBtn");
+    if (copyBtn) copyBtn.onclick = function () { copyToClipboard(msg); };
 
     document.getElementById("wizardWrap").style.display = "none";
     document.getElementById("successWrap").style.display = "block";
@@ -376,6 +435,7 @@
       ts: Date.now()
     });
     GospoloStore.set("bookingHistory", history.slice(0, 20));
+    clearDraft();
 
     window.open(link, "_blank");
   }
@@ -387,12 +447,19 @@
     if (svc && GOSPOLO_SERVICES.some(function (s) { return s.id === svc; })) {
       state.serviceId = svc;
       state.step = 2;
+      return true;
     }
+    return false;
   }
 
   document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("confirmInfoIcon").innerHTML = gospoloIcon("info");
-    initFromQuery();
+    const explicitStart = initFromQuery();
+    if (explicitStart) {
+      clearDraft();
+    } else if (restoreDraftIfAny()) {
+      gospoloToast("आपकी पिछली अधूरी बुकिंग वापस लाई गई है");
+    }
     renderProgress();
     showStep(state.step);
     renderCurrentStepContent();

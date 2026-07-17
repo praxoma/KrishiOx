@@ -48,37 +48,90 @@ gospolo/
 │   ├── main.js               # Header/nav rendering, WhatsApp helpers, SW registration
 │   └── booking.js            # Booking wizard state machine & WhatsApp message builder
 ├── icons/                   # Generated PWA icons (192/512, maskable, apple-touch, favicons)
+├── robots.txt               # Crawler rules + sitemap pointer
+├── sitemap.xml              # Indexable pages, for Google Search Console
+├── CNAME                    # Only present once a custom domain is configured (see below)
 └── dev/
-    └── generate_icons.py    # One-off Python/Pillow script used to generate icons/ (not needed at runtime)
+    ├── generate_icons.py    # One-off Python/Pillow script used to generate icons/ (not needed at runtime)
+    └── rebrand.js           # Renames the platform / switches domain everywhere in one command (not needed at runtime)
 ```
 
 ---
 
 ## 🚀 Deploy to GitHub Pages
 
-1. Create a new GitHub repository (e.g. `gospolo`).
-2. Push the contents of this folder to the repository root (or to a `docs/` folder — your choice).
-3. In **Settings → Pages**, set the source branch and folder (`/root` or `/docs`).
-4. Your app will be live at `https://<username>.github.io/<repo>/`.
+### Right now — no domain, no name decided yet
 
-Because every asset reference in this project uses **relative paths** (`css/style.css`,
-`js/main.js`, `icons/icon-192.png`, etc.), it works correctly whether deployed at a domain root
-or inside a repo sub-path — no path rewriting needed.
+This works today, for free, with nothing to buy or configure:
+
+1. Push this repo to GitHub (already done if you're reading this from the repo).
+2. In **Settings → Pages**, set the source to your default branch, folder `/root`.
+3. Your app is live at `https://<username>.github.io/<repo>/` within a minute — e.g. this project
+   is currently live at `https://praxoma.github.io/gospolo/`.
+
+Because every asset reference uses **relative paths** (`css/style.css`, `js/main.js`,
+`icons/icon-192.png`, etc.), the site works correctly whether it's served at a domain root or
+inside a GitHub Pages sub-path — no path rewriting needed either way.
 
 > **Note:** GitHub Pages serves over HTTPS, which is required for service workers and the
-> "Add to Home Screen" install prompt to function.
+> "Add to Home Screen" install prompt to function — both already work on the free `github.io` URL.
 
-### 🌐 Custom domain (gospolo.in)
+**While you're testing, every page ships a temporary `<meta name="robots" content="noindex, follow">`**
+(look for the `TEMP` comment right above it in each `<head>`). This stops Google from indexing the
+throwaway `github.io` URL and later treating it as duplicate content once the real domain goes
+live. Leave it in until you're ready to actually launch — see "Going live" below.
 
-The repo root already has a `CNAME` file containing `gospolo.in`. To point the domain at GitHub Pages:
+### Renaming the platform or changing the domain
+
+Everything JS-rendered (header, footer, WhatsApp message text, toasts) already reads the brand
+name from `js/config.js` — edit `appName` / `brandInitials` there and it updates everywhere at
+runtime, no other file needed.
+
+What JS *can't* safely drive is the static SEO surface: `<title>`, meta description, canonical
+URL, Open Graph/Twitter tags, JSON-LD, and `manifest.json`. Those have to be real static text —
+WhatsApp/Facebook/Twitter link-preview bots and some crawlers don't execute JavaScript, so
+JS-injecting them would make link previews and search snippets break. `dev/rebrand.js` is a
+zero-dependency Node script (no `npm install` needed) that updates all of that in one command:
+
+```bash
+# See what's currently configured
+node dev/rebrand.js --status
+
+# Rename the platform everywhere (titles, OG tags, JSON-LD, manifest.json, config.js, README, ...)
+node dev/rebrand.js --name "AgriSetu" --initials "AS"
+
+# Still testing, no domain yet — point every URL at your GitHub Pages address
+node dev/rebrand.js --github-pages yourGithubUser/your-repo
+
+# Once you've bought a domain and pointed DNS at it — see "Custom domain" below
+node dev/rebrand.js --domain example.in
+
+# Flags combine — do it all in one shot:
+node dev/rebrand.js --name "AgriSetu" --initials "AS" --domain agrisetu.in
+```
+
+Run `git diff` afterward to review exactly what changed before committing.
+
+### 🌐 Custom domain (once one is bought)
 
 1. At your domain registrar, add DNS records for the apex domain pointing to GitHub Pages:
    - Four `A` records for `@` → `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
-   - (Optional) a `CNAME` record for `www` → `<username>.github.io`, if you also want `www.gospolo.in` to work
-2. In **Settings → Pages**, set the custom domain to `gospolo.in` and wait for DNS to verify.
-3. Enable **Enforce HTTPS** once the certificate is issued (can take a few hours after DNS propagates).
+   - (Optional) a `CNAME` record for `www` → `<username>.github.io`, if you also want `www.<domain>` to work
+2. Run `node dev/rebrand.js --domain yourdomain.com` — this writes the `CNAME` file GitHub Pages
+   needs and repoints every canonical/OG/sitemap/robots URL in one go.
+3. In **Settings → Pages**, set the custom domain to `yourdomain.com` and wait for DNS to verify.
+4. Enable **Enforce HTTPS** once the certificate is issued (can take a few hours after DNS propagates).
 
-All canonical URLs, `sitemap.xml`, `robots.txt`, and Open Graph tags in this project assume `https://gospolo.in/` — update them if the domain changes.
+### Going live (removing the noindex safety net)
+
+Once the final name + domain are actually live and you *want* Google to index the site:
+
+```bash
+node dev/rebrand.js --go-live
+```
+
+This strips the temporary `noindex` tag (and its marker comment) from every page. Then submit the
+site in Google Search Console (see SEO section below).
 
 ---
 
@@ -93,9 +146,14 @@ both are eligible for rich results in Google Search.
   suggestions in the booking wizard, and the text used across About/Contact copy). Add new towns
   there first.
 - `robots.txt` + `sitemap.xml` (repo root) list all indexable pages; `offline.html` is marked
-  `noindex` since it's just the service-worker fallback shell, not real content.
-- After the custom domain is live, add `https://gospolo.in/` in **Google Search Console**, verify
-  ownership, and submit `https://gospolo.in/sitemap.xml` so pages get crawled.
+  `noindex` permanently since it's just the service-worker fallback shell, not real content. The
+  other 6 pages carry a *temporary* `noindex` too, until you run `--go-live` (see above).
+- Once live for real, add the site in **Google Search Console**, verify ownership, and submit
+  `sitemap.xml` so pages get crawled.
+- Internal technical identifiers — the `localStorage` key prefix (`gospolo:`, in `GospoloStore`)
+  and the service worker's `CACHE_VERSION` — deliberately stay lowercase and are **not** touched by
+  a rename. That's intentional: they're plumbing, not user-facing branding, and keeping them
+  stable means a future rename never orphans a returning user's saved booking history or draft.
 
 ---
 
