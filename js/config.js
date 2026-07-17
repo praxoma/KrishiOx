@@ -137,7 +137,7 @@ const GOSPOLO_VILLAGES = [
   "फंदपुरी (Phandpuri)",
   "परसौली (Parasauli)",
   "बिजना खेड़ी (Bijna Kheri)",
-  "दैद नौर (Daid Naur)",
+  "दैदनौर (Daid Naur)",
   "ठाठ खेड़ी (Thath Kheri)",
   "खजूर हेड़ी (Khazoor Heri)",
   "चक मछेर हेड़ी (Chak Machher Heri)",
