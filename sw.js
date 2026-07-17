@@ -15,7 +15,7 @@
      the latest version onto a device that already has the PWA installed.
    ========================================================================== */
 
-const CACHE_VERSION = "gospolo-v2";
+const CACHE_VERSION = "gospolo-v3";
 const STATIC_CACHE = CACHE_VERSION + "-static";
 const NAV_TIMEOUT_MS = 4000;
 
@@ -27,6 +27,8 @@ const APP_SHELL = [
   "./partners.html",
   "./about.html",
   "./contact.html",
+  "./terms.html",
+  "./privacy.html",
   "./offline.html",
   "./manifest.json",
   "./css/style.css",

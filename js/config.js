@@ -24,7 +24,19 @@ const GOSPOLO_CONFIG = {
   // execute JavaScript — use dev/rebrand.js to update those in one command.
   appName: "GOSPOLO",
   brandInitials: "GP",
-  appTagline: "खेती की सेवाएँ, समय पर बुकिंग"
+  appTagline: "खेती की सेवाएँ, समय पर बुकिंग",
+
+  // --- Legal / consent ---
+  // Bump legalVersion (any string, e.g. an ISO date) whenever terms.html or
+  // privacy.html changes in a way users should be re-notified about — the
+  // consent banner in main.js re-prompts anyone whose saved consent doesn't
+  // match this value, instead of silently assuming old consent still holds.
+  legalVersion: "2026-07-18",
+
+  // TODO before real launch: replace with a real, monitored inbox — required
+  // for grievance redressal under India's DPDP Act 2023 and shown on
+  // privacy.html / terms.html.
+  legalContactEmail: "legal@example.com"
 };
 
 // Master service catalogue — used on Home, Services, and Booking pages.

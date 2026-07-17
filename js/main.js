@@ -24,7 +24,9 @@
       "booking.html": "booking",
       "partners.html": "partners",
       "about.html": "about",
-      "contact.html": "contact"
+      "contact.html": "contact",
+      "terms.html": "terms",
+      "privacy.html": "privacy"
     };
     return map[path] || "home";
   }
@@ -58,7 +60,9 @@
       { href: "services.html", label: "सेवाएँ", key: "services" },
       { href: "about.html", label: "हमारे बारे में", key: "about" },
       { href: "partners.html", label: "पार्टनर", key: "partners" },
-      { href: "contact.html", label: "संपर्क", key: "contact" }
+      { href: "contact.html", label: "संपर्क", key: "contact" },
+      { href: "terms.html", label: "नियम व शर्तें", key: "terms" },
+      { href: "privacy.html", label: "गोपनीयता नीति", key: "privacy" }
     ];
     mount.innerHTML = links.map(function (l) {
       return '<a href="' + l.href + '"' + (l.key === active ? ' style="color:var(--copper);font-weight:800;"' : "") + '>' + l.label + "</a>";
@@ -107,6 +111,51 @@
     });
   }
   applyTextZoom(parseFloat(GospoloStore.get("textZoom", 1)));
+
+  /* ---- Data controls (used by privacy.html's "Clear my data" button) ----
+     Kept as an explicit key list rather than clearing all localStorage —
+     precise and auditable against what the Privacy Policy actually claims
+     this button deletes. */
+  function clearAllGospoloData() {
+    ["bookingDraft", "bookingHistory", "textZoom", "legalConsent"].forEach(function (key) {
+      try { localStorage.removeItem("gospolo:" + key); } catch (e) { /* storage unavailable */ }
+    });
+    applyTextZoom(1);
+  }
+  window.clearAllGospoloData = clearAllGospoloData;
+
+  /* ---- Consent banner (Terms / Privacy) ----
+     Not a cookie banner — this app sets no cookies. Shown once on first
+     visit, and again automatically if GOSPOLO_CONFIG.legalVersion changes,
+     so a policy update doesn't get silently assumed-accepted for a
+     returning visitor. */
+  function initConsentBanner() {
+    if (document.getElementById("consentBanner")) return;
+    const stored = GospoloStore.get("legalConsent", null);
+    if (stored && stored.version === GOSPOLO_CONFIG.legalVersion) return;
+
+    const isUpdate = !!(stored && stored.version);
+    const message = isUpdate
+      ? "हमारी नियम व शर्तें और गोपनीयता नीति अपडेट हुई हैं — कृपया दोबारा देखें और स्वीकृति दें।"
+      : GOSPOLO_CONFIG.appName + " का उपयोग जारी रखने पर आप हमारी नियम व शर्तें और गोपनीयता नीति से सहमत होते हैं। आपकी बुकिंग जानकारी सिर्फ एक WhatsApp मैसेज बनाने के लिए उपयोग होती है — किसी सर्वर पर सेव नहीं होती।";
+
+    const banner = document.createElement("div");
+    banner.id = "consentBanner";
+    banner.className = "consent-banner";
+    banner.innerHTML =
+      "<p>" + message + "</p>" +
+      '<div class="consent-actions">' +
+        '<a href="terms.html" class="consent-link">नियम</a>' +
+        '<a href="privacy.html" class="consent-link">गोपनीयता</a>' +
+        '<button type="button" class="btn btn-primary btn-sm" id="consentAcceptBtn">मैं सहमत हूँ</button>' +
+      "</div>";
+    document.body.appendChild(banner);
+
+    document.getElementById("consentAcceptBtn").addEventListener("click", function () {
+      GospoloStore.set("legalConsent", { version: GOSPOLO_CONFIG.legalVersion, ts: Date.now() });
+      banner.remove();
+    });
+  }
 
   /* ---- Floating WhatsApp button (present on every page) ---- */
   function renderFab() {
@@ -251,6 +300,7 @@
     initInstallButton();
     initTextSize();
     notifyIfJustUpdated();
+    initConsentBanner();
   });
 
   initServiceWorker();

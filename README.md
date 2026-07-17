@@ -37,6 +37,8 @@ gospolo/
 ├── partners.html          # Equipment owner / fleet partner onboarding
 ├── about.html              # Mission, values, roadmap
 ├── contact.html            # WhatsApp / call / FAQ
+├── terms.html              # Terms & Conditions
+├── privacy.html            # Privacy Policy + "clear my data" control
 ├── offline.html            # Offline fallback page (served by the service worker)
 ├── manifest.json           # PWA manifest (icons, shortcuts, theme)
 ├── sw.js                   # Service worker — app-shell caching + offline support
@@ -147,13 +149,42 @@ both are eligible for rich results in Google Search.
   there first.
 - `robots.txt` + `sitemap.xml` (repo root) list all indexable pages; `offline.html` is marked
   `noindex` permanently since it's just the service-worker fallback shell, not real content. The
-  other 6 pages carry a *temporary* `noindex` too, until you run `--go-live` (see above).
+  other 8 pages carry a *temporary* `noindex` too, until you run `--go-live` (see above).
 - Once live for real, add the site in **Google Search Console**, verify ownership, and submit
   `sitemap.xml` so pages get crawled.
 - Internal technical identifiers — the `localStorage` key prefix (`gospolo:`, in `GospoloStore`)
   and the service worker's `CACHE_VERSION` — deliberately stay lowercase and are **not** touched by
   a rename. That's intentional: they're plumbing, not user-facing branding, and keeping them
   stable means a future rename never orphans a returning user's saved booking history or draft.
+
+---
+
+## ⚖️ Legal, consent, and data handling
+
+`terms.html` and `privacy.html` are written to match how this app actually works — no backend, no
+login, no payments, no cookies or analytics; booking details become a WhatsApp message sent from
+the farmer's own number, and a few things (in-progress booking draft, recent history, text-size
+preference, consent record) are saved only in the browser's local storage. **Have both reviewed by
+a qualified lawyer before a real public launch** — they're a solid starting template, not legal
+advice.
+
+- **Not a cookie banner.** This app sets zero cookies (verified — grep for `document.cookie` comes
+  back empty), so the consent banner in `js/main.js` (`initConsentBanner`) is honestly scoped to
+  what's real: local storage usage and the WhatsApp hand-off, with links to the full policies.
+  Building a generic "we use cookies" banner here would itself be a compliance problem — it'd be
+  false.
+- **Versioned re-consent.** `GOSPOLO_CONFIG.legalVersion` (in `js/config.js`) is the single source
+  of truth. Bump it whenever `terms.html` or `privacy.html` changes materially — anyone whose saved
+  consent doesn't match the current version sees the banner again automatically, with different
+  copy ("policy updated" vs. first-time), instead of a stale acceptance silently carrying forward.
+- **"Clear my data"** on `privacy.html` removes exactly the keys the Privacy Policy says it does
+  (`clearAllGospoloData()` in `js/main.js`) — an explicit list, not a blanket `localStorage.clear()`,
+  so it stays auditable against what the page actually claims.
+- **Before real launch**, fill in `GOSPOLO_CONFIG.legalContactEmail` with a real, monitored inbox —
+  it's shown on both legal pages and is expected for grievance redressal under India's Digital
+  Personal Data Protection Act, 2023.
+- `dev/rebrand.js` already includes `terms.html` and `privacy.html` in its file list, so a rename
+  updates the brand name there too.
 
 ---
 

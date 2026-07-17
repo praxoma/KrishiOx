@@ -929,9 +929,49 @@ input, select, textarea { font-family: inherit; }
 @media (min-width: 560px) {
   body { background: #E7E2D8; }
   .app-shell { box-shadow: 0 0 60px rgba(0,0,0,0.15); }
-  .site-header, .bottom-nav, .fab-whatsapp { left: 50%; transform: translateX(-50%); right: auto; }
+  .site-header, .bottom-nav, .fab-whatsapp, .consent-banner { left: 50%; transform: translateX(-50%); right: auto; }
   .fab-whatsapp { transform: translateX(calc(280px - 56px - 16px)); }
 }
+
+/* ==========================================================================
+   Consent banner (Terms / Privacy) — first visit, and again if the policy
+   version changes. Not a "cookie" banner: this app sets no cookies, so the
+   copy is honest about what's actually stored (see js/main.js).
+   ========================================================================== */
+.consent-banner {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--bottomnav-h) + var(--safe-bottom));
+  z-index: 60;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  background: var(--charcoal);
+  color: var(--text-on-dark);
+  padding: var(--sp-4);
+  box-shadow: 0 -8px 24px rgba(17, 24, 39, 0.3);
+  border-top: 1px solid rgba(217, 164, 65, 0.25);
+  animation: fadeSlideIn 0.3s ease;
+}
+.consent-banner p {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text-on-dark-muted);
+  margin-bottom: var(--sp-3);
+}
+.consent-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+.consent-actions .consent-link {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--gold-soft);
+  text-decoration: underline;
+  flex-shrink: 0;
+}
+.consent-actions .btn { flex: 1; }
 
 /* ==========================================================================
    Misc pages: About / Contact / Partners
@@ -1062,6 +1102,32 @@ input, select, textarea { font-family: inherit; }
   background: var(--gold);
   color: var(--charcoal);
 }
+
+/* Long-form legal text (Terms / Privacy) */
+.legal-body h2 {
+  font-size: 15.5px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-top: var(--sp-6);
+  margin-bottom: 8px;
+}
+.legal-body h2:first-child { margin-top: 0; }
+.legal-body p {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: var(--sp-2);
+}
+.legal-body ul {
+  padding-left: 20px;
+  list-style: disc;
+  margin: 8px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.legal-body li { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+.legal-body a { color: var(--copper); text-decoration: underline; }
 
 /* Utility */
 .mt-2 { margin-top: var(--sp-2); }

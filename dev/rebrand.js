@@ -48,6 +48,7 @@ const path = require("path");
 const ROOT = path.resolve(__dirname, "..");
 const TEXT_FILES = [
   "index.html", "about.html", "contact.html", "services.html", "booking.html", "partners.html", "offline.html",
+  "terms.html", "privacy.html",
   "manifest.json", "sitemap.xml", "robots.txt", "README.md",
   "js/config.js", "js/main.js", "js/booking.js", "js/icons.js", "sw.js"
 ];
