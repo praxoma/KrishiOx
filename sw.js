@@ -15,7 +15,7 @@
      the latest version onto a device that already has the PWA installed.
    ========================================================================== */
 
-const CACHE_VERSION = "gospolo-v3";
+const CACHE_VERSION = "gospolo-v4";
 const STATIC_CACHE = CACHE_VERSION + "-static";
 const NAV_TIMEOUT_MS = 4000;
 
@@ -85,7 +85,10 @@ self.addEventListener("fetch", function (event) {
   if (req.mode === "navigate") {
     event.respondWith(
       (function () {
-        const networkPromise = fetch(req).then(function (res) {
+        // cache: "no-store" forces this past the browser's own HTTP disk
+        // cache (GitHub Pages sends max-age=600) so a fresh deploy is seen
+        // immediately instead of only after that window expires.
+        const networkPromise = fetch(req, { cache: "no-store" }).then(function (res) {
           const resClone = res.clone();
           caches.open(STATIC_CACHE).then(function (cache) { cache.put(req, resClone); });
           return res;
@@ -115,7 +118,7 @@ self.addEventListener("fetch", function (event) {
   // Static assets: cache-first, update cache in background.
   event.respondWith(
     caches.match(req).then(function (cached) {
-      const fetchPromise = fetch(req).then(function (res) {
+      const fetchPromise = fetch(req, { cache: "no-store" }).then(function (res) {
         if (res && res.status === 200 && res.type === "basic") {
           const resClone = res.clone();
           caches.open(STATIC_CACHE).then(function (cache) { cache.put(req, resClone); });

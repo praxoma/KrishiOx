@@ -88,6 +88,7 @@
         '<span class="brand-text"><strong>' + GOSPOLO_CONFIG.appName + '</strong><span>' + GOSPOLO_CONFIG.serviceArea + "</span></span>" +
       "</a>" +
       '<div class="header-actions">' +
+        '<button type="button" class="header-action header-action-install" id="installBtn" aria-label="ऐप इंस्टॉल करें" style="display:none;">' + gospoloIcon("install") + "</button>" +
         '<button type="button" class="header-action text-size-btn" id="textSizeBtn" aria-label="टेक्स्ट का आकार बड़ा करें">A+</button>' +
         '<a class="header-action header-action-call" href="tel:' + GOSPOLO_CONFIG.callNumber + '" aria-label="कॉल करें">' + gospoloIcon("phone") + "</a>" +
       "</div>";
@@ -244,7 +245,12 @@
         window.location.reload();
       });
 
-      navigator.serviceWorker.register("sw.js").then(function (reg) {
+      // updateViaCache: "none" — without this, some browsers will check for a
+      // new sw.js by reading it back from the HTTP disk cache (max-age=600 on
+      // GitHub Pages) instead of the network, so an update check can report
+      // "no change" for up to 10 minutes even though a new version was just
+      // pushed. Forcing "none" means every check is a real network request.
+      navigator.serviceWorker.register("sw.js", { updateViaCache: "none" }).then(function (reg) {
         // The browser's own update check can lag on a poor connection;
         // re-check whenever the app comes back to the foreground.
         document.addEventListener("visibilitychange", function () {
@@ -275,6 +281,7 @@
   function initInstallButton() {
     const btn = document.getElementById("installBtn");
     if (!btn) return;
+    if (deferredInstallPrompt) btn.style.display = "inline-flex";
     btn.addEventListener("click", function () {
       if (!deferredInstallPrompt) {
         showToast("ऐप पहले से इंस्टॉल है या ब्राउज़र मेनू से इंस्टॉल करें");
