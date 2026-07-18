@@ -5,10 +5,10 @@
 
 const GOSPOLO_CONFIG = {
   // WhatsApp business number in international format, no + or spaces.
-  whatsappNumber: "919999999999",
+  whatsappNumber: "919015579855",
 
   // Phone number for direct calling (tel: link)
-  callNumber: "+919999999999",
+  callNumber: "+919015579855",
 
   // Service area label shown across the app
   serviceArea: "सहारनपुर, उत्तर प्रदेश",
