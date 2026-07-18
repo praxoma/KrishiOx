@@ -69,7 +69,7 @@ This works today, for free, with nothing to buy or configure:
 1. Push this repo to GitHub (already done if you're reading this from the repo).
 2. In **Settings → Pages**, set the source to your default branch, folder `/root`.
 3. Your app is live at `https://<username>.github.io/<repo>/` within a minute — e.g. this project
-   is currently live at `https://praxoma.github.io/gospolo/`.
+   is currently live at `https://krishiox.in/`.
 
 Because every asset reference uses **relative paths** (`css/style.css`, `js/main.js`,
 `icons/icon-192.png`, etc.), the site works correctly whether it's served at a domain root or

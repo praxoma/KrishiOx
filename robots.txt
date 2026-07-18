@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /offline.html
 
-Sitemap: https://praxoma.github.io/gospolo/sitemap.xml
+Sitemap: https://krishiox.in/sitemap.xml

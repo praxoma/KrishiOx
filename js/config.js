@@ -33,10 +33,11 @@ const KRISHIOX_CONFIG = {
   // match this value, instead of silently assuming old consent still holds.
   legalVersion: "2026-07-18.2",
 
-  // TODO before real launch: replace with a real, monitored inbox — required
-  // for grievance redressal under India's DPDP Act 2023 and shown on
-  // privacy.html / terms.html.
-  legalContactEmail: "legal@example.com"
+  // Grievance/contact inbox — required for grievance redressal under India's
+  // DPDP Act 2023, shown on privacy.html / terms.html. Set up as a free Zoho
+  // Mail mailbox on the krishiox.in domain — confirm it's actually receiving
+  // mail before --go-live.
+  legalContactEmail: "legal@krishiox.in"
 };
 
 // Master service catalogue — used on Home, Services, and Booking pages.
