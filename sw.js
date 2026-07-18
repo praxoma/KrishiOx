@@ -1,5 +1,5 @@
 /* ==========================================================================
-   GOSPOLO — Service Worker
+   KrishiOx — Service Worker
    Strategy (tuned for poor/flaky rural connectivity, not just "offline"):
    - App shell (HTML/CSS/JS/icons/manifest) precached on install, resiliently —
      one flaky asset must not fail the whole precache on a bad 2G/3G link.
@@ -15,7 +15,7 @@
      the latest version onto a device that already has the PWA installed.
    ========================================================================== */
 
-const CACHE_VERSION = "gospolo-v4";
+const CACHE_VERSION = "krishiox-v1";
 const STATIC_CACHE = CACHE_VERSION + "-static";
 const NAV_TIMEOUT_MS = 4000;
 

@@ -3,18 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>पार्टनर बनें — GOSPOLO | सहारनपुर, रुड़की, नकुड़ क्षेत्र</title>
-<meta name="description" content="अपना ट्रैक्टर या कृषि उपकरण GOSPOLO के साथ जोड़ें और सहारनपुर, रुड़की, नकुड़, गंगोह, बंडूखेड़ी, रामपुर मनिहारान क्षेत्र में अतिरिक्त आय अर्जित करें।">
+<title>पार्टनर बनें — KrishiOx | सहारनपुर, रुड़की, नकुड़ क्षेत्र</title>
+<meta name="description" content="अपना ट्रैक्टर या कृषि उपकरण KrishiOx के साथ जोड़ें और सहारनपुर, रुड़की, नकुड़, गंगोह, बंडूखेड़ी, रामपुर मनिहारान क्षेत्र में अतिरिक्त आय अर्जित करें।">
 <link rel="canonical" href="https://praxoma.github.io/gospolo/partners.html">
 <!-- TEMP while testing on github.io / before domain is finalized — remove this line to go live (see README "Going live") -->
 <meta name="robots" content="noindex, follow">
 <meta name="theme-color" content="#111827">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="GOSPOLO">
+<meta property="og:site_name" content="KrishiOx">
 <meta property="og:locale" content="hi_IN">
-<meta property="og:title" content="पार्टनर बनें — GOSPOLO">
-<meta property="og:description" content="अपना ट्रैक्टर या कृषि उपकरण GOSPOLO के साथ जोड़ें और सहारनपुर, रुड़की, नकुड़, गंगोह, बंडूखेड़ी, रामपुर मनिहारान क्षेत्र में अतिरिक्त आय अर्जित करें।">
+<meta property="og:title" content="पार्टनर बनें — KrishiOx">
+<meta property="og:description" content="अपना ट्रैक्टर या कृषि उपकरण KrishiOx के साथ जोड़ें और सहारनपुर, रुड़की, नकुड़, गंगोह, बंडूखेड़ी, रामपुर मनिहारान क्षेत्र में अतिरिक्त आय अर्जित करें।">
 <meta property="og:url" content="https://praxoma.github.io/gospolo/partners.html">
 <meta property="og:image" content="https://praxoma.github.io/gospolo/icons/icon-512.png">
 <link rel="manifest" href="manifest.json">
@@ -31,7 +34,7 @@
   <main class="page">
     <section class="page-hero-sm">
       <span class="tag">Become a Partner</span>
-      <h1>अपना उपकरण GOSPOLO से जोड़ें</h1>
+      <h1>अपना उपकरण KrishiOx से जोड़ें</h1>
       <p>ट्रैक्टर, हार्वेस्टर या अन्य कृषि उपकरण के मालिक हैं? हमारे साथ जुड़ें और नियमित आय पाएँ।</p>
     </section>
 
@@ -98,7 +101,7 @@
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".value-card .v-icon").forEach(function (el) {
-      el.outerHTML = gospoloIcon(el.getAttribute("data-icon"));
+      el.outerHTML = krishiOxIcon(el.getAttribute("data-icon"));
     });
 
     const tier1Items = [
@@ -112,22 +115,22 @@
       "प्राथमिकता सूची में स्थान"
     ];
     document.getElementById("tierList1").innerHTML = tier1Items.map(function (t) {
-      return "<li>" + gospoloIcon("check") + "<span>" + t + "</span></li>";
+      return "<li>" + krishiOxIcon("check") + "<span>" + t + "</span></li>";
     }).join("");
     document.getElementById("tierList2").innerHTML = tier2Items.map(function (t) {
-      return "<li>" + gospoloIcon("check") + "<span>" + t + "</span></li>";
+      return "<li>" + krishiOxIcon("check") + "<span>" + t + "</span></li>";
     }).join("");
 
-    const waMsg1 = "नमस्ते GOSPOLO, मैं अपना ट्रैक्टर/उपकरण पार्टनर के रूप में जोड़ना चाहता हूँ।";
-    const waMsg2 = "नमस्ते GOSPOLO, मैं फ्लीट पार्टनर के रूप में जुड़ना चाहता हूँ। मेरे पास एक से अधिक उपकरण हैं।";
+    const waMsg1 = "नमस्ते KrishiOx, मैं अपना ट्रैक्टर/उपकरण पार्टनर के रूप में जोड़ना चाहता हूँ।";
+    const waMsg2 = "नमस्ते KrishiOx, मैं फ्लीट पार्टनर के रूप में जुड़ना चाहता हूँ। मेरे पास एक से अधिक उपकरण हैं।";
 
     const tier1Btn = document.getElementById("tier1Btn");
     tier1Btn.href = buildWhatsAppLink(waMsg1);
-    tier1Btn.innerHTML = gospoloIcon("whatsapp") + " WhatsApp पर जुड़ें";
+    tier1Btn.innerHTML = krishiOxIcon("whatsapp") + " WhatsApp पर जुड़ें";
 
     const tier2Btn = document.getElementById("tier2Btn");
     tier2Btn.href = buildWhatsAppLink(waMsg2);
-    tier2Btn.innerHTML = gospoloIcon("whatsapp") + " फ्लीट पार्टनर बनें";
+    tier2Btn.innerHTML = krishiOxIcon("whatsapp") + " फ्लीट पार्टनर बनें";
 
     document.getElementById("ctaPartnerBtn").href = buildWhatsAppLink(waMsg1);
   });

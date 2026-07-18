@@ -1,9 +1,9 @@
 /* ==========================================================================
-   GOSPOLO — Global Config
+   KrishiOx — Global Config
    Edit these values to configure the deployment.
    ========================================================================== */
 
-const GOSPOLO_CONFIG = {
+const KRISHIOX_CONFIG = {
   // WhatsApp business number in international format, no + or spaces.
   whatsappNumber: "919015579855",
 
@@ -22,8 +22,8 @@ const GOSPOLO_CONFIG = {
   // (<title>, meta description, canonical, Open Graph, JSON-LD, manifest.json)
   // can't be JS-driven without hurting crawlers/link-preview bots that don't
   // execute JavaScript — use dev/rebrand.js to update those in one command.
-  appName: "GOSPOLO",
-  brandInitials: "GP",
+  appName: "KrishiOx",
+  brandInitials: "KO",
   appTagline: "खेती की सेवाएँ, समय पर बुकिंग",
 
   // --- Legal / consent ---
@@ -40,7 +40,7 @@ const GOSPOLO_CONFIG = {
 };
 
 // Master service catalogue — used on Home, Services, and Booking pages.
-const GOSPOLO_SERVICES = [
+const KRISHIOX_SERVICES = [
   {
     id: "tractor",
     nameHi: "ट्रैक्टर सेवा",
@@ -132,7 +132,7 @@ const GOSPOLO_SERVICES = [
 ];
 
 // Common villages / areas around Saharanpur — shown as datalist suggestions.
-const GOSPOLO_VILLAGES = [
+const KRISHIOX_VILLAGES = [
   "बांदूखेड़ी (Bandukheri)",
   "फंदपुरी (Phandpuri)",
   "परसौली (Parasauli)",
@@ -152,10 +152,10 @@ const GOSPOLO_VILLAGES = [
 ];
 
 // Persist app-wide small state in localStorage safely.
-const GospoloStore = {
+const KrishiOxStore = {
   get(key, fallback) {
     try {
-      const v = localStorage.getItem("gospolo:" + key);
+      const v = localStorage.getItem("krishiox:" + key);
       return v === null ? fallback : JSON.parse(v);
     } catch (e) {
       return fallback;
@@ -163,7 +163,7 @@ const GospoloStore = {
   },
   set(key, value) {
     try {
-      localStorage.setItem("gospolo:" + key, JSON.stringify(value));
+      localStorage.setItem("krishiox:" + key, JSON.stringify(value));
     } catch (e) { /* storage unavailable — ignore */ }
   }
 };

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   GOSPOLO — Design System
+   KrishiOx — Design System
    BioRawNex theme: Charcoal / Copper / Biomass Gold / Ivory
    Mobile-first, no frameworks.
    ========================================================================== */
@@ -1179,3 +1179,43 @@ footer.site-footer strong { color: var(--copper); }
   margin-bottom: var(--sp-4);
 }
 .footer-links a { color: var(--text-muted); }
+
+.footer-update-btn {
+  display: block;
+  margin: var(--sp-4) auto 0;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: var(--r-full);
+  padding: 8px 18px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+.footer-update-btn:active { border-color: var(--gold); color: var(--gold); }
+
+/* ==========================================================================
+   Rotate-to-portrait overlay
+   Only for touch phones held sideways — desktops/laptops (hover:hover,
+   pointer:fine) and tablets/wide viewports never match this, so the
+   min-width:560px "concept view" for non-mobile devices is unaffected.
+   ========================================================================== */
+.rotate-overlay { display: none; }
+@media (orientation: landscape) and (max-width: 900px) and (hover: none) and (pointer: coarse) {
+  .app-shell { display: none; }
+  .rotate-overlay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-5);
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: var(--charcoal);
+    color: var(--text-on-dark);
+    text-align: center;
+    padding: var(--sp-6);
+  }
+  .rotate-overlay-icon svg { width: 56px; height: 56px; stroke: var(--gold); transform: rotate(90deg); }
+  .rotate-overlay p { max-width: 260px; font-size: 15px; font-weight: 600; }
+}

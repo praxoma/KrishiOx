@@ -1,5 +1,5 @@
 """
-Generates GOSPOLO app icons: charcoal background, gold->copper gradient
+Generates KrishiOx app icons: charcoal background, gold->copper gradient
 rounded square / circle mark with "GP" monogram, wheat-sheaf accent.
 No external assets — pure PIL drawing.
 """

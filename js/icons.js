@@ -1,10 +1,10 @@
 /* ==========================================================================
-   GOSPOLO — Icon Library
+   KrishiOx — Icon Library
    Lightweight inline SVGs (stroke-based, currentColor friendly).
    No external icon fonts/dependencies.
    ========================================================================== */
 
-const GOSPOLO_ICONS = {
+const KRISHIOX_ICONS = {
   tractor: `<svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6.5" cy="17.5" r="2.5"/><circle cx="17" cy="17.5" r="3.5"/><path d="M9 17.5h5.5"/><path d="M4 13l1.5-5h6l1 3h3.5a2 2 0 0 1 2 2v2.5"/><path d="M11.5 8V5h3"/><path d="M2 13h3"/></svg>`,
   rotavator: `<svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6" r="2"/><path d="M12 8v4"/><path d="M5 20l2-8h10l2 8"/><path d="M5 20h14"/><path d="M8 20v-3M12 20v-3M16 20v-3"/></svg>`,
   cultivator: `<svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l4 4"/><path d="M20 4l-4 4"/><path d="M12 3v6"/><path d="M6 10h12l-2 10H8L6 10z"/><path d="M9 14h6"/></svg>`,
@@ -43,12 +43,13 @@ const GOSPOLO_ICONS = {
   location: `<svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-11a7 7 0 1 0-14 0c0 4.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>`,
   future: `<svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>`,
   plus: `<svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>`,
-  install: `<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13"/><path d="M7 11l5 5 5-5"/><path d="M4 19h16"/></svg>`
+  install: `<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13"/><path d="M7 11l5 5 5-5"/><path d="M4 19h16"/></svg>`,
+  rotate: `<svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="8" height="14" rx="1.5"/><path d="M19 9a7 7 0 0 1-11.5 5.3"/><path d="M4.5 12a7 7 0 0 1 3-5.7"/><path d="M17.5 6.5L19 9l2.7-1"/><path d="M6.5 17.5L4.5 12l-2.7 1.3"/></svg>`
 };
 
 /**
  * Returns inline SVG markup for a given icon key.
  */
-function gospoloIcon(name) {
-  return GOSPOLO_ICONS[name] || GOSPOLO_ICONS.other;
+function krishiOxIcon(name) {
+  return KRISHIOX_ICONS[name] || KRISHIOX_ICONS.other;
 }

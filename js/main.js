@@ -1,5 +1,5 @@
 /* ==========================================================================
-   GOSPOLO — Shared App Logic
+   KrishiOx — Shared App Logic
    Runs on every page: header, bottom nav, WhatsApp helpers, SW, install prompt.
    ========================================================================== */
 
@@ -40,11 +40,11 @@
       const isActive = item.key === active;
       if (item.isBook) {
         html += '<a class="nav-item nav-item-book' + (isActive ? " active" : "") + '" href="' + item.href + '">' +
-          '<span class="nav-book-btn">' + gospoloIcon(item.icon) + "</span>" +
+          '<span class="nav-book-btn">' + krishiOxIcon(item.icon) + "</span>" +
           "<span>" + item.labelHi + "</span></a>";
       } else {
         html += '<a class="nav-item' + (isActive ? " active" : "") + '" href="' + item.href + '">' +
-          gospoloIcon(item.icon) + "<span>" + item.labelHi + "</span></a>";
+          krishiOxIcon(item.icon) + "<span>" + item.labelHi + "</span></a>";
       }
     });
     mount.innerHTML = html;
@@ -74,8 +74,36 @@
     const mount = document.getElementById("footerBrand");
     if (!mount) return;
     mount.innerHTML =
-      "<strong>" + GOSPOLO_CONFIG.appName + "</strong> — " + GOSPOLO_CONFIG.appTagline + "<br>" +
-      "© " + new Date().getFullYear() + " " + GOSPOLO_CONFIG.appName + ". " + GOSPOLO_CONFIG.serviceArea + " में सेवा उपलब्ध।";
+      "<strong>" + KRISHIOX_CONFIG.appName + "</strong> — " + KRISHIOX_CONFIG.appTagline + "<br>" +
+      "© " + new Date().getFullYear() + " " + KRISHIOX_CONFIG.appName + ". " + KRISHIOX_CONFIG.serviceArea + " में सेवा उपलब्ध।" +
+      '<button type="button" id="checkUpdateBtn" class="footer-update-btn">नवीनतम अपडेट जांचें</button>';
+  }
+
+  /* ---- Manual "check for update" (belt-and-braces alongside the automatic
+     background check on visibilitychange) — mainly so users have a visible
+     way to confirm they're on the latest version instead of just trusting
+     it happened silently. */
+  function initCheckUpdateButton() {
+    const btn = document.getElementById("checkUpdateBtn");
+    if (!btn) return;
+    if (!("serviceWorker" in navigator)) { btn.style.display = "none"; return; }
+    btn.addEventListener("click", function () {
+      navigator.serviceWorker.getRegistration().then(function (reg) {
+        if (!reg) { showToast("अपडेट सेवा उपलब्ध नहीं है"); return; }
+        showToast("नवीनतम जांच रहे हैं...");
+        let updated = false;
+        navigator.serviceWorker.addEventListener("controllerchange", function onCC() {
+          updated = true;
+        }, { once: true });
+        reg.update().then(function () {
+          setTimeout(function () {
+            if (!updated) showToast("आप पहले से नवीनतम संस्करण पर हैं ✓");
+          }, 2500);
+        }).catch(function () {
+          showToast("जांच नहीं हो सकी — नेटवर्क जांचें");
+        });
+      });
+    });
   }
 
   /* ---- Header ---- */
@@ -84,13 +112,13 @@
     if (!mount) return;
     mount.innerHTML =
       '<a href="index.html" class="brand">' +
-        '<span class="brand-mark">' + GOSPOLO_CONFIG.brandInitials + '</span>' +
-        '<span class="brand-text"><strong>' + GOSPOLO_CONFIG.appName + '</strong><span>' + GOSPOLO_CONFIG.serviceArea + "</span></span>" +
+        '<span class="brand-mark">' + KRISHIOX_CONFIG.brandInitials + '</span>' +
+        '<span class="brand-text"><strong>' + KRISHIOX_CONFIG.appName + '</strong><span>' + KRISHIOX_CONFIG.serviceArea + "</span></span>" +
       "</a>" +
       '<div class="header-actions">' +
-        '<button type="button" class="header-action header-action-install" id="installBtn" aria-label="ऐप इंस्टॉल करें" style="display:none;">' + gospoloIcon("install") + "</button>" +
+        '<button type="button" class="header-action header-action-install" id="installBtn" aria-label="ऐप इंस्टॉल करें" style="display:none;">' + krishiOxIcon("install") + "</button>" +
         '<button type="button" class="header-action text-size-btn" id="textSizeBtn" aria-label="टेक्स्ट का आकार बड़ा करें">A+</button>' +
-        '<a class="header-action header-action-call" href="tel:' + GOSPOLO_CONFIG.callNumber + '" aria-label="कॉल करें">' + gospoloIcon("phone") + "</a>" +
+        '<a class="header-action header-action-call" href="tel:' + KRISHIOX_CONFIG.callNumber + '" aria-label="कॉल करें">' + krishiOxIcon("phone") + "</a>" +
       "</div>";
   }
 
@@ -103,42 +131,42 @@
     const btn = document.getElementById("textSizeBtn");
     if (!btn) return;
     btn.addEventListener("click", function () {
-      const current = parseFloat(GospoloStore.get("textZoom", 1));
+      const current = parseFloat(KrishiOxStore.get("textZoom", 1));
       const idx = TEXT_ZOOM_LEVELS.indexOf(current);
       const next = TEXT_ZOOM_LEVELS[(idx + 1) % TEXT_ZOOM_LEVELS.length];
-      GospoloStore.set("textZoom", next);
+      KrishiOxStore.set("textZoom", next);
       applyTextZoom(next);
       showToast("टेक्स्ट का आकार: " + Math.round(next * 100) + "%");
     });
   }
-  applyTextZoom(parseFloat(GospoloStore.get("textZoom", 1)));
+  applyTextZoom(parseFloat(KrishiOxStore.get("textZoom", 1)));
 
   /* ---- Data controls (used by privacy.html's "Clear my data" button) ----
      Kept as an explicit key list rather than clearing all localStorage —
      precise and auditable against what the Privacy Policy actually claims
      this button deletes. */
-  function clearAllGospoloData() {
+  function clearAllKrishiOxData() {
     ["bookingDraft", "bookingHistory", "textZoom", "legalConsent"].forEach(function (key) {
-      try { localStorage.removeItem("gospolo:" + key); } catch (e) { /* storage unavailable */ }
+      try { localStorage.removeItem("krishiox:" + key); } catch (e) { /* storage unavailable */ }
     });
     applyTextZoom(1);
   }
-  window.clearAllGospoloData = clearAllGospoloData;
+  window.clearAllKrishiOxData = clearAllKrishiOxData;
 
   /* ---- Consent banner (Terms / Privacy) ----
      Not a cookie banner — this app sets no cookies. Shown once on first
-     visit, and again automatically if GOSPOLO_CONFIG.legalVersion changes,
+     visit, and again automatically if KRISHIOX_CONFIG.legalVersion changes,
      so a policy update doesn't get silently assumed-accepted for a
      returning visitor. */
   function initConsentBanner() {
     if (document.getElementById("consentBanner")) return;
-    const stored = GospoloStore.get("legalConsent", null);
-    if (stored && stored.version === GOSPOLO_CONFIG.legalVersion) return;
+    const stored = KrishiOxStore.get("legalConsent", null);
+    if (stored && stored.version === KRISHIOX_CONFIG.legalVersion) return;
 
     const isUpdate = !!(stored && stored.version);
     const message = isUpdate
       ? "हमारी नियम व शर्तें और गोपनीयता नीति अपडेट हुई हैं — कृपया दोबारा देखें और स्वीकृति दें।"
-      : GOSPOLO_CONFIG.appName + " का उपयोग जारी रखने पर आप हमारी नियम व शर्तें और गोपनीयता नीति से सहमत होते हैं। आपकी बुकिंग जानकारी सिर्फ एक WhatsApp मैसेज बनाने के लिए उपयोग होती है — किसी सर्वर पर सेव नहीं होती।";
+      : KRISHIOX_CONFIG.appName + " का उपयोग जारी रखने पर आप हमारी नियम व शर्तें और गोपनीयता नीति से सहमत होते हैं। आपकी बुकिंग जानकारी सिर्फ एक WhatsApp मैसेज बनाने के लिए उपयोग होती है — किसी सर्वर पर सेव नहीं होती।";
 
     const banner = document.createElement("div");
     banner.id = "consentBanner";
@@ -153,7 +181,7 @@
     document.body.appendChild(banner);
 
     document.getElementById("consentAcceptBtn").addEventListener("click", function () {
-      GospoloStore.set("legalConsent", { version: GOSPOLO_CONFIG.legalVersion, ts: Date.now() });
+      KrishiOxStore.set("legalConsent", { version: KRISHIOX_CONFIG.legalVersion, ts: Date.now() });
       banner.remove();
     });
   }
@@ -165,16 +193,34 @@
     a.id = "globalFab";
     a.className = "fab-whatsapp";
     a.setAttribute("aria-label", "WhatsApp पर संपर्क करें");
-    a.href = buildWhatsAppLink("नमस्ते " + GOSPOLO_CONFIG.appName + ", मुझे खेती सेवा के बारे में जानकारी चाहिए।");
+    a.href = buildWhatsAppLink("नमस्ते " + KRISHIOX_CONFIG.appName + ", मुझे खेती सेवा के बारे में जानकारी चाहिए।");
     a.target = "_blank";
     a.rel = "noopener";
-    a.innerHTML = gospoloIcon("whatsapp");
+    a.innerHTML = krishiOxIcon("whatsapp");
     document.body.appendChild(a);
+  }
+
+  /* ---- Rotate-to-portrait overlay ----
+     Manifest's "orientation": "portrait-primary" only locks orientation once
+     installed to the home screen (standalone mode) on Android, and isn't
+     honoured by iOS Safari at all even then. For everyone else (a regular
+     browser tab, or any iOS user), this CSS-only overlay swaps in in place
+     of the app whenever a touch phone is rotated to landscape, so the
+     wizard/layout is never seen mid-rotation instead of just being locked. */
+  function renderRotateOverlay() {
+    if (document.getElementById("rotateOverlay")) return;
+    const el = document.createElement("div");
+    el.id = "rotateOverlay";
+    el.className = "rotate-overlay";
+    el.innerHTML =
+      '<div class="rotate-overlay-icon">' + krishiOxIcon("rotate") + "</div>" +
+      "<p>बेहतर अनुभव के लिए कृपया अपना फ़ोन सीधा (पोर्ट्रेट मोड में) रखें</p>";
+    document.body.appendChild(el);
   }
 
   /* ---- WhatsApp helpers ---- */
   function buildWhatsAppLink(message) {
-    const num = GOSPOLO_CONFIG.whatsappNumber;
+    const num = KRISHIOX_CONFIG.whatsappNumber;
     return "https://wa.me/" + num + "?text=" + encodeURIComponent(message);
   }
   window.buildWhatsAppLink = buildWhatsAppLink;
@@ -182,10 +228,10 @@
   /* ---- Toast ---- */
   let toastTimer = null;
   function showToast(msg, duration) {
-    let toast = document.getElementById("gospoloToast");
+    let toast = document.getElementById("krishiOxToast");
     if (!toast) {
       toast = document.createElement("div");
-      toast.id = "gospoloToast";
+      toast.id = "krishiOxToast";
       toast.className = "toast";
       document.body.appendChild(toast);
     }
@@ -196,7 +242,7 @@
       toast.classList.remove("show");
     }, duration || 2400);
   }
-  window.gospoloToast = showToast;
+  window.krishiOxToast = showToast;
 
   /* ---- FAQ accordion (used on Contact/About pages) ---- */
   function initFaq() {
@@ -241,7 +287,7 @@
       navigator.serviceWorker.addEventListener("controllerchange", function () {
         if (!hadController || reloading) return;
         reloading = true;
-        sessionStorage.setItem("gospolo:justUpdated", "1");
+        sessionStorage.setItem("krishiox:justUpdated", "1");
         window.location.reload();
       });
 
@@ -263,9 +309,9 @@
   }
 
   function notifyIfJustUpdated() {
-    if (sessionStorage.getItem("gospolo:justUpdated")) {
-      sessionStorage.removeItem("gospolo:justUpdated");
-      showToast(GOSPOLO_CONFIG.appName + " अपडेट हो गया है ✓");
+    if (sessionStorage.getItem("krishiox:justUpdated")) {
+      sessionStorage.removeItem("krishiox:justUpdated");
+      showToast(KRISHIOX_CONFIG.appName + " अपडेट हो गया है ✓");
     }
   }
 
@@ -302,9 +348,11 @@
     renderFooterLinks();
     renderFooterBrand();
     renderFab();
+    renderRotateOverlay();
     initFaq();
     initOfflineBanner();
     initInstallButton();
+    initCheckUpdateButton();
     initTextSize();
     notifyIfJustUpdated();
     initConsentBanner();

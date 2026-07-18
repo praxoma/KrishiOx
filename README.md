@@ -1,4 +1,4 @@
-# GOSPOLO 🌾
+# KrishiOx 🌾
 
 **खेती की सेवाएँ, समय पर बुकिंग.**
 A mobile-first Progressive Web App for scheduling farming services (tractor, rotavator, cultivator,
@@ -30,7 +30,7 @@ Hindi-first wizard, and confirm the booking with **one tap into WhatsApp** via a
 ## 📁 Project structure
 
 ```
-gospolo/
+krishiox/
 ├── index.html            # Home
 ├── services.html         # Full service catalogue
 ├── booking.html           # 6-step booking wizard
@@ -144,7 +144,7 @@ tags naming the service area. `index.html` also carries a `Service` JSON-LD bloc
 full service catalogue) and `contact.html` carries `FAQPage` JSON-LD matching its visible FAQ —
 both are eligible for rich results in Google Search.
 
-- `js/config.js` → `GOSPOLO_VILLAGES` is the single source of truth for the area list (datalist
+- `js/config.js` → `KRISHIOX_VILLAGES` is the single source of truth for the area list (datalist
   suggestions in the booking wizard, and the text used across About/Contact copy). Add new towns
   there first.
 - `robots.txt` + `sitemap.xml` (repo root) list all indexable pages; `offline.html` is marked
@@ -152,10 +152,15 @@ both are eligible for rich results in Google Search.
   other 8 pages carry a *temporary* `noindex` too, until you run `--go-live` (see above).
 - Once live for real, add the site in **Google Search Console**, verify ownership, and submit
   `sitemap.xml` so pages get crawled.
-- Internal technical identifiers — the `localStorage` key prefix (`gospolo:`, in `GospoloStore`)
-  and the service worker's `CACHE_VERSION` — deliberately stay lowercase and are **not** touched by
-  a rename. That's intentional: they're plumbing, not user-facing branding, and keeping them
-  stable means a future rename never orphans a returning user's saved booking history or draft.
+- Internal technical identifiers — the `localStorage` key prefix (`krishiox:`, in `KrishiOxStore`)
+  and the service worker's `CACHE_VERSION` — were renamed along with the brand during the
+  GOSPOLO → KrishiOx rebrand, on purpose, so no trace of the old name remained anywhere in the
+  codebase. The tradeoff: this orphans any returning user's already-saved booking draft/history,
+  text-size preference, and consent record from before the rebrand (their data isn't deleted, it's
+  just unreachable under the new key prefix). That was an acceptable one-time cost pre-launch. For
+  any *future* rename, once there's real user data at stake, keep these two identifiers stable
+  instead — they're plumbing, not user-facing branding, and stability here means a later rename
+  never silently drops a returning user's saved state.
 
 ---
 
@@ -173,14 +178,14 @@ advice.
   what's real: local storage usage and the WhatsApp hand-off, with links to the full policies.
   Building a generic "we use cookies" banner here would itself be a compliance problem — it'd be
   false.
-- **Versioned re-consent.** `GOSPOLO_CONFIG.legalVersion` (in `js/config.js`) is the single source
+- **Versioned re-consent.** `KRISHIOX_CONFIG.legalVersion` (in `js/config.js`) is the single source
   of truth. Bump it whenever `terms.html` or `privacy.html` changes materially — anyone whose saved
   consent doesn't match the current version sees the banner again automatically, with different
   copy ("policy updated" vs. first-time), instead of a stale acceptance silently carrying forward.
 - **"Clear my data"** on `privacy.html` removes exactly the keys the Privacy Policy says it does
-  (`clearAllGospoloData()` in `js/main.js`) — an explicit list, not a blanket `localStorage.clear()`,
+  (`clearAllKrishiOxData()` in `js/main.js`) — an explicit list, not a blanket `localStorage.clear()`,
   so it stays auditable against what the page actually claims.
-- **Before real launch**, fill in `GOSPOLO_CONFIG.legalContactEmail` with a real, monitored inbox —
+- **Before real launch**, fill in `KRISHIOX_CONFIG.legalContactEmail` with a real, monitored inbox —
   it's shown on both legal pages and is expected for grievance redressal under India's Digital
   Personal Data Protection Act, 2023.
 - `dev/rebrand.js` already includes `terms.html` and `privacy.html` in its file list, so a rename
@@ -193,7 +198,7 @@ advice.
 All deployment-specific values live in **`js/config.js`**:
 
 ```js
-const GOSPOLO_CONFIG = {
+const KRISHIOX_CONFIG = {
   whatsappNumber: "919999999999",   // WhatsApp Business number, digits only, country code first
   callNumber: "+919999999999",      // Displayed / dialled for the "Call" contact option
   serviceArea: "सहारनपुर, उत्तर प्रदेश",
@@ -204,8 +209,8 @@ const GOSPOLO_CONFIG = {
 
 **Update `whatsappNumber` and `callNumber` before going live.**
 
-The service catalogue (`GOSPOLO_SERVICES`) and the village/area suggestion list
-(`GOSPOLO_VILLAGES`) are also defined in `config.js` — add, remove, or relabel entries there;
+The service catalogue (`KRISHIOX_SERVICES`) and the village/area suggestion list
+(`KRISHIOX_VILLAGES`) are also defined in `config.js` — add, remove, or relabel entries there;
 every page (Home, Services, Booking) reads from this single source of truth.
 
 ---
@@ -247,12 +252,12 @@ The codebase intentionally keeps a clean separation so these can be layered in w
 | Feature | Where it plugs in |
 |---|---|
 | **Vendor dashboard** | New `vendor/` section; `js/config.js` service catalogue is already data-driven |
-| **AI advisory** | New page + API call; `GOSPOLO_SERVICES` structure can extend with crop/advisory metadata |
+| **AI advisory** | New page + API call; `KRISHIOX_SERVICES` structure can extend with crop/advisory metadata |
 | **Weather** | A `js/weather.js` module + card on Home, backed by any public weather API |
-| **Marketplace** | `GOSPOLO_STORE` pattern in `config.js` can be extended into a product catalogue |
+| **Marketplace** | `KRISHIOX_STORE` pattern in `config.js` can be extended into a product catalogue |
 | **Payments** | Booking wizard already isolates a single `confirmBooking()` step in `booking.js` — swap the WhatsApp handoff for a payment step without touching steps 1–5 |
 | **Equipment tracking** | `places_map`-style live map view, using the same design tokens in `style.css` |
-| **Analytics** | `GospoloStore` (in `config.js`) already writes a local booking history — swap for a real analytics/events endpoint |
+| **Analytics** | `KrishiOxStore` (in `config.js`) already writes a local booking history — swap for a real analytics/events endpoint |
 
 ---
 
@@ -285,4 +290,4 @@ All tokens are defined once in `css/style.css :root` — update there to re-them
 
 ---
 
-© 2026 GOSPOLO. Built for the farmers of Saharanpur, Uttar Pradesh.
+© 2026 KrishiOx. Built for the farmers of Saharanpur, Uttar Pradesh.

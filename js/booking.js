@@ -1,5 +1,5 @@
 /* ==========================================================================
-   GOSPOLO — Booking Wizard
+   KrishiOx — Booking Wizard
    Service -> Village -> Area/Qty -> Date -> Remarks -> Confirm -> WhatsApp
    ========================================================================== */
 
@@ -22,22 +22,22 @@
   };
 
   function getService() {
-    return GOSPOLO_SERVICES.find(function (s) { return s.id === state.serviceId; }) || null;
+    return KRISHIOX_SERVICES.find(function (s) { return s.id === state.serviceId; }) || null;
   }
 
   /* ---------------- Draft persistence (survives a dropped connection, killed tab, or reload) ---------------- */
   const DRAFT_KEY = "bookingDraft";
 
   function saveDraft() {
-    GospoloStore.set(DRAFT_KEY, state);
+    KrishiOxStore.set(DRAFT_KEY, state);
   }
 
   function clearDraft() {
-    GospoloStore.set(DRAFT_KEY, null);
+    KrishiOxStore.set(DRAFT_KEY, null);
   }
 
   function restoreDraftIfAny() {
-    const draft = GospoloStore.get(DRAFT_KEY, null);
+    const draft = KrishiOxStore.get(DRAFT_KEY, null);
     if (!draft || typeof draft !== "object" || !draft.step || draft.step <= 1) return false;
     Object.assign(state, draft);
     if (state.step > TOTAL_STEPS) state.step = TOTAL_STEPS;
@@ -61,11 +61,11 @@
   function renderServiceGrid() {
     const grid = document.getElementById("bookingServiceGrid");
     let html = "";
-    GOSPOLO_SERVICES.forEach(function (s) {
+    KRISHIOX_SERVICES.forEach(function (s) {
       const sel = s.id === state.serviceId ? " selected" : "";
       html += '<button type="button" class="service-card' + sel + '" data-service="' + s.id + '">' +
-        '<span class="check-badge">' + gospoloIcon("check") + '</span>' +
-        '<span class="icon-wrap">' + gospoloIcon(s.icon) + '</span>' +
+        '<span class="check-badge">' + krishiOxIcon("check") + '</span>' +
+        '<span class="icon-wrap">' + krishiOxIcon(s.icon) + '</span>' +
         '<span class="s-name-hi">' + s.nameHi + '</span>' +
         '<span class="s-name-en">' + s.nameEn + '</span>' +
       '</button>';
@@ -85,11 +85,11 @@
   /* ---------------- Step 2: Village ---------------- */
   function renderVillageStep() {
     const dl = document.getElementById("villageList");
-    dl.innerHTML = GOSPOLO_VILLAGES.map(function (v) { return '<option value="' + v + '">'; }).join("");
+    dl.innerHTML = KRISHIOX_VILLAGES.map(function (v) { return '<option value="' + v + '">'; }).join("");
 
     const chipsWrap = document.getElementById("villageChips");
     let chipHtml = "";
-    GOSPOLO_VILLAGES.slice(0, 6).forEach(function (v) {
+    KRISHIOX_VILLAGES.slice(0, 6).forEach(function (v) {
       chipHtml += '<button type="button" class="chip" data-village="' + v + '">' + v.split(" (")[0] + "</button>";
     });
     chipsWrap.innerHTML = chipHtml;
@@ -291,7 +291,7 @@
   function buildBookingMessage() {
     const svc = getService();
     let lines = [];
-    lines.push("नमस्ते GOSPOLO 🙏");
+    lines.push("नमस्ते KrishiOx 🙏");
     lines.push("मुझे निम्न सेवा बुक करनी है:");
     lines.push("");
     lines.push("🔧 सेवा: " + (svc ? svc.nameHi + " (" + svc.nameEn + ")" : "—"));
@@ -350,7 +350,7 @@
 
   function goNext() {
     if (!validStep(state.step)) {
-      gospoloToast("कृपया आवश्यक जानकारी भरें");
+      krishiOxToast("कृपया आवश्यक जानकारी भरें");
       return;
     }
     if (state.step === TOTAL_STEPS) {
@@ -391,7 +391,7 @@
   function copyToClipboard(text) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text).then(function () {
-        gospoloToast("मैसेज कॉपी हो गया — नेटवर्क आने पर पेस्ट करके भेजें");
+        krishiOxToast("मैसेज कॉपी हो गया — नेटवर्क आने पर पेस्ट करके भेजें");
       }).catch(function () { legacyCopy(text); });
     } else {
       legacyCopy(text);
@@ -408,9 +408,9 @@
     ta.select();
     try {
       document.execCommand("copy");
-      gospoloToast("मैसेज कॉपी हो गया — नेटवर्क आने पर पेस्ट करके भेजें");
+      krishiOxToast("मैसेज कॉपी हो गया — नेटवर्क आने पर पेस्ट करके भेजें");
     } catch (e) {
-      gospoloToast("कॉपी नहीं हो सका, कृपया दोबारा प्रयास करें");
+      krishiOxToast("कॉपी नहीं हो सका, कृपया दोबारा प्रयास करें");
     }
     document.body.removeChild(ta);
   }
@@ -419,10 +419,10 @@
     const msg = buildBookingMessage();
     const link = buildWhatsAppLink(msg);
 
-    document.getElementById("successIcon").innerHTML = gospoloIcon("checkCircle");
+    document.getElementById("successIcon").innerHTML = krishiOxIcon("checkCircle");
     const waBtn = document.getElementById("successWaBtn");
     waBtn.href = link;
-    waBtn.innerHTML = gospoloIcon("whatsapp") + " WhatsApp पर भेजें";
+    waBtn.innerHTML = krishiOxIcon("whatsapp") + " WhatsApp पर भेजें";
 
     const copyBtn = document.getElementById("copyMessageBtn");
     if (copyBtn) copyBtn.onclick = function () { copyToClipboard(msg); };
@@ -431,14 +431,14 @@
     document.getElementById("successWrap").style.display = "block";
 
     // Persist last booking locally (for future "my bookings" expansion)
-    const history = GospoloStore.get("bookingHistory", []);
+    const history = KrishiOxStore.get("bookingHistory", []);
     history.unshift({
       service: state.serviceId,
       village: state.village,
       date: state.date,
       ts: Date.now()
     });
-    GospoloStore.set("bookingHistory", history.slice(0, 20));
+    KrishiOxStore.set("bookingHistory", history.slice(0, 20));
     clearDraft();
 
     window.open(link, "_blank");
@@ -448,7 +448,7 @@
   function initFromQuery() {
     const params = new URLSearchParams(window.location.search);
     const svc = params.get("service");
-    if (svc && GOSPOLO_SERVICES.some(function (s) { return s.id === svc; })) {
+    if (svc && KRISHIOX_SERVICES.some(function (s) { return s.id === svc; })) {
       state.serviceId = svc;
       state.step = 2;
       return true;
@@ -457,12 +457,12 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("confirmInfoIcon").innerHTML = gospoloIcon("info");
+    document.getElementById("confirmInfoIcon").innerHTML = krishiOxIcon("info");
     const explicitStart = initFromQuery();
     if (explicitStart) {
       clearDraft();
     } else if (restoreDraftIfAny()) {
-      gospoloToast("आपकी पिछली अधूरी बुकिंग वापस लाई गई है");
+      krishiOxToast("आपकी पिछली अधूरी बुकिंग वापस लाई गई है");
     }
     renderProgress();
     showStep(state.step);

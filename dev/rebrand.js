@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* ==========================================================================
-   GOSPOLO — Rebrand utility
+   KrishiOx — Rebrand utility
    Zero-dependency Node script (matches the project's "no build step"
    philosophy — this is a one-off dev tool, not something the site needs
    at runtime, same idea as dev/generate_icons.py).
@@ -77,7 +77,7 @@ function parseArgs(argv) {
 function detectCurrentName() {
   const cfg = readFile("js/config.js") || "";
   const m = cfg.match(/appName:\s*"([^"]+)"/);
-  return m ? m[1] : "GOSPOLO";
+  return m ? m[1] : "KrishiOx";
 }
 
 function detectCurrentBase() {

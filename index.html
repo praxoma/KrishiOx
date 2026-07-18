@@ -3,22 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>GOSPOLO — सहारनपुर, रुड़की व नकुड़ में खेती सेवा बुकिंग</title>
-<meta name="description" content="GOSPOLO से सहारनपुर, रुड़की, नकुड़, गंगोह, बंडूखेड़ी, रामपुर मनिहारान व आस-पास के क्षेत्रों में ट्रैक्टर, रोटावेटर, हार्वेस्टिंग और अन्य खेती सेवाएँ पहले से बुक करें। WhatsApp पर तुरंत पुष्टि पाएँ।">
+<title>KrishiOx — सहारनपुर, रुड़की व नकुड़ में खेती सेवा बुकिंग</title>
+<meta name="description" content="KrishiOx से सहारनपुर, रुड़की, नकुड़, गंगोह, बंडूखेड़ी, रामपुर मनिहारान व आस-पास के क्षेत्रों में ट्रैक्टर, रोटावेटर, हार्वेस्टिंग और अन्य खेती सेवाएँ पहले से बुक करें। WhatsApp पर तुरंत पुष्टि पाएँ।">
 <link rel="canonical" href="https://praxoma.github.io/gospolo/">
 <!-- TEMP while testing on github.io / before domain is finalized — remove this line to go live (see README "Going live") -->
 <meta name="robots" content="noindex, follow">
 <meta name="theme-color" content="#111827">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="GOSPOLO">
+<meta property="og:site_name" content="KrishiOx">
 <meta property="og:locale" content="hi_IN">
-<meta property="og:title" content="GOSPOLO — सहारनपुर, रुड़की व नकुड़ में खेती सेवा बुकिंग">
+<meta property="og:title" content="KrishiOx — सहारनपुर, रुड़की व नकुड़ में खेती सेवा बुकिंग">
 <meta property="og:description" content="ट्रैक्टर, रोटावेटर, हार्वेस्टिंग और अन्य खेती सेवाएँ सहारनपुर, रुड़की, नकुड़, गंगोह, बंडूखेड़ी, रामपुर मनिहारान क्षेत्र में पहले से बुक करें। WhatsApp पर तुरंत पुष्टि पाएँ।">
 <meta property="og:url" content="https://praxoma.github.io/gospolo/">
 <meta property="og:image" content="https://praxoma.github.io/gospolo/icons/icon-512.png">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="GOSPOLO — सहारनपुर, रुड़की व नकुड़ में खेती सेवा बुकिंग">
+<meta name="twitter:title" content="KrishiOx — सहारनपुर, रुड़की व नकुड़ में खेती सेवा बुकिंग">
 <meta name="twitter:description" content="ट्रैक्टर, रोटावेटर, हार्वेस्टिंग और अन्य खेती सेवाएँ पहले से बुक करें — सहारनपुर, रुड़की, नकुड़, गंगोह, बंडूखेड़ी, रामपुर मनिहारान क्षेत्र में उपलब्ध।">
 <meta name="twitter:image" content="https://praxoma.github.io/gospolo/icons/icon-512.png">
 <link rel="manifest" href="manifest.json">
@@ -32,7 +35,7 @@
   "serviceType": "कृषि उपकरण व खेती सेवा बुकिंग (Farm equipment booking service)",
   "provider": {
     "@type": "Organization",
-    "name": "GOSPOLO",
+    "name": "KrishiOx",
     "url": "https://praxoma.github.io/gospolo/"
   },
   "areaServed": [
@@ -54,7 +57,7 @@
   ],
   "hasOfferCatalog": {
     "@type": "OfferCatalog",
-    "name": "GOSPOLO Services",
+    "name": "KrishiOx Services",
     "itemListElement": [
       { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Tractor Service" } },
       { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Rotavator" } },
@@ -167,26 +170,26 @@
 <script src="js/icons.js"></script>
 <script src="js/main.js"></script>
 <script>
-  // Hero icon fills (done post-load since gospoloIcon() is JS, not usable in raw HTML attrs)
+  // Hero icon fills (done post-load since krishiOxIcon() is JS, not usable in raw HTML attrs)
   document.addEventListener("DOMContentLoaded", function () {
-    document.querySelector(".hero-eyebrow").innerHTML = gospoloIcon("star") + " सहारनपुर की भरोसेमंद खेती सेवा";
-    document.querySelector(".link-more").innerHTML = "सभी देखें " + gospoloIcon("chevronRight");
+    document.querySelector(".hero-eyebrow").innerHTML = krishiOxIcon("star") + " सहारनपुर की भरोसेमंद खेती सेवा";
+    document.querySelector(".link-more").innerHTML = "सभी देखें " + krishiOxIcon("chevronRight");
 
     const trustItems = document.querySelectorAll(".trust-item");
-    trustItems[0].innerHTML = gospoloIcon("clock") + "<span>समय पर सेवा</span>";
-    trustItems[1].innerHTML = gospoloIcon("rupee") + "<span>उचित मूल्य</span>";
-    trustItems[2].innerHTML = gospoloIcon("shield") + "<span>भरोसेमंद पार्टनर</span>";
+    trustItems[0].innerHTML = krishiOxIcon("clock") + "<span>समय पर सेवा</span>";
+    trustItems[1].innerHTML = krishiOxIcon("rupee") + "<span>उचित मूल्य</span>";
+    trustItems[2].innerHTML = krishiOxIcon("shield") + "<span>भरोसेमंद पार्टनर</span>";
 
     const heroWa = document.getElementById("heroWaBtn");
-    heroWa.href = buildWhatsAppLink("नमस्ते GOSPOLO, मुझे खेती सेवा बुक करनी है।");
-    heroWa.innerHTML = gospoloIcon("whatsapp");
+    heroWa.href = buildWhatsAppLink("नमस्ते KrishiOx, मुझे खेती सेवा बुक करनी है।");
+    heroWa.innerHTML = krishiOxIcon("whatsapp");
 
     // Quick service grid — first 6 services
     const grid = document.getElementById("quickServiceGrid");
     let gridHtml = "";
-    GOSPOLO_SERVICES.slice(0, 6).forEach(function (s) {
+    KRISHIOX_SERVICES.slice(0, 6).forEach(function (s) {
       gridHtml += '<a class="service-card" href="booking.html?service=' + s.id + '">' +
-        '<span class="icon-wrap">' + gospoloIcon(s.icon) + "</span>" +
+        '<span class="icon-wrap">' + krishiOxIcon(s.icon) + "</span>" +
         '<span class="s-name-hi">' + s.nameHi + "</span>" +
         '<span class="s-name-en">' + s.nameEn + "</span>" +
         "</a>";

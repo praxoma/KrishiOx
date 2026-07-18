@@ -1,6 +1,6 @@
 {
-  "name": "GOSPOLO — खेती सेवाओं की बुकिंग",
-  "short_name": "GOSPOLO",
+  "name": "KrishiOx — खेती सेवाओं की बुकिंग",
+  "short_name": "KrishiOx",
   "description": "सहारनपुर में खेती सेवाओं की अग्रिम बुकिंग — ट्रैक्टर, रोटावेटर, हार्वेस्टिंग व अन्य सेवाएँ।",
   "start_url": "./index.html",
   "scope": "./",
