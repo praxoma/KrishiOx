@@ -11,7 +11,7 @@
    - Static assets: cache-first, revalidate in background (unchanged — this
      is already the fast option under poor connectivity).
    - Cache versioning: bump CACHE_VERSION to invalidate old caches on deploy.
-     Combined with the update logic in js/main.js, this is what makes a new
+     Combined with the update logic in js/pwa.js, this is what makes a new
      version available to a device that already has the PWA installed.
    - Update handoff: a new worker installs and precaches in the background
      but does NOT skipWaiting() automatically — it waits for an explicit
@@ -20,7 +20,7 @@
      booking wizard is never yanked onto a fresh reload without asking.
    ========================================================================== */
 
-const CACHE_VERSION = "krishiox-v5";
+const CACHE_VERSION = "krishiox-v9";
 const STATIC_CACHE = CACHE_VERSION + "-static";
 const NAV_TIMEOUT_MS = 4000;
 
@@ -37,10 +37,27 @@ const APP_SHELL = [
   "./offline.html",
   "./manifest.json",
   "./css/style.css",
-  "./js/config.js",
+  "./js/branding.js",
+  "./js/contact.js",
+  "./js/regions.js",
+  "./js/services.js",
+  "./js/villages.js",
+  "./js/app.js",
+  "./js/storage.js",
   "./js/icons.js",
+  "./js/whatsapp.js",
+  "./js/navigation.js",
+  "./js/utils.js",
+  "./js/ui.js",
+  "./js/pwa.js",
   "./js/main.js",
   "./js/booking.js",
+  "./js/booking/model.js",
+  "./js/booking/validator.js",
+  "./js/booking/serializer.js",
+  "./js/booking/delivery-adapter.js",
+  "./js/booking/whatsapp-delivery-adapter.js",
+  "./js/booking/engine.js",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
   "./icons/apple-touch-icon.png"

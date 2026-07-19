@@ -6,7 +6,7 @@
    at runtime, same idea as dev/generate_icons.py).
 
    Everything JS-rendered (header, footer, WhatsApp messages, toasts)
-   already reads the brand name from js/config.js, so that part never
+   already reads the brand name from js/branding.js, so that part never
    needs this script. But <title>, meta description, canonical URLs, Open
    Graph/Twitter tags, JSON-LD, and manifest.json are static text baked
    into each HTML file on purpose — link-preview bots (WhatsApp, Facebook,
@@ -20,7 +20,7 @@
 
      node dev/rebrand.js --name "AgriSetu" --initials "AS"
        Rename the platform everywhere (title tags, OG tags, JSON-LD,
-       manifest.json, js/config.js, README, footer/header via config.js).
+       manifest.json, js/branding.js, README, footer/header via branding.js).
 
      node dev/rebrand.js --github-pages yourGithubUser/your-repo
        Point all canonical/OG/sitemap/robots URLs at the free GitHub Pages
@@ -50,7 +50,12 @@ const TEXT_FILES = [
   "index.html", "about.html", "contact.html", "services.html", "booking.html", "partners.html", "offline.html",
   "terms.html", "privacy.html",
   "manifest.json", "sitemap.xml", "robots.txt", "README.md",
-  "js/config.js", "js/main.js", "js/booking.js", "js/icons.js", "sw.js"
+  "js/branding.js", "js/contact.js", "js/regions.js", "js/services.js", "js/villages.js", "js/app.js",
+  "js/storage.js", "js/icons.js", "js/whatsapp.js", "js/navigation.js",
+  "js/utils.js", "js/ui.js", "js/pwa.js", "js/main.js", "js/booking.js",
+  "js/booking/model.js", "js/booking/validator.js", "js/booking/serializer.js",
+  "js/booking/delivery-adapter.js", "js/booking/whatsapp-delivery-adapter.js", "js/booking/engine.js",
+  "sw.js"
 ];
 
 function readFile(rel) {
@@ -75,7 +80,7 @@ function parseArgs(argv) {
 }
 
 function detectCurrentName() {
-  const cfg = readFile("js/config.js") || "";
+  const cfg = readFile("js/branding.js") || "";
   const m = cfg.match(/appName:\s*"([^"]+)"/);
   return m ? m[1] : "KrishiOx";
 }
@@ -134,10 +139,10 @@ function main() {
   }
 
   if (args.initials) {
-    const cfg = readFile("js/config.js");
+    const cfg = readFile("js/branding.js");
     const updated = cfg.replace(/brandInitials:\s*"[^"]*"/, 'brandInitials: "' + args.initials + '"');
-    writeFile("js/config.js", updated);
-    console.log("Set brandInitials to \"" + args.initials + "\" in js/config.js");
+    writeFile("js/branding.js", updated);
+    console.log("Set brandInitials to \"" + args.initials + "\" in js/branding.js");
   }
 
   if (args.domain) {

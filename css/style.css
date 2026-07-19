@@ -66,7 +66,13 @@
 /* ==========================================================================
    Reset
    ========================================================================== */
-*, *::before, *::after { box-sizing: border-box; }
+/* -webkit-tap-highlight-color here (not just on .btn) so every custom
+   tappable element (service cards, chips, nav items, FAQ questions,
+   contact rows — anything clickable that isn't a native <button>) gets the
+   same tap feedback treatment; without it, Chrome for Android shows its
+   default gray highlight flash on those specific elements while .btn stays
+   clean, an inconsistency Safari/desktop browsers don't exhibit. */
+*, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { margin: 0; padding: 0; }
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 
@@ -319,7 +325,6 @@ input, select, textarea { font-family: inherit; }
   font-weight: 700;
   width: 100%;
   transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
-  -webkit-tap-highlight-color: transparent;
 }
 .btn:active { transform: scale(0.97); }
 
@@ -1222,9 +1227,14 @@ footer.site-footer strong { color: var(--copper); }
    Only for touch phones held sideways — desktops/laptops (hover:hover,
    pointer:fine) and tablets/wide viewports never match this, so the
    min-width:560px "concept view" for non-mobile devices is unaffected.
+   max-width raised from 900px to 980px: the largest current iPhones (14/15
+   Plus and Pro Max, 926-932px CSS width in landscape) exceeded 900px and
+   fell through the check, showing the portrait-only wizard layout
+   unprompted in landscape. iPad's narrowest landscape width (iPad mini,
+   1024px) still safely clears 980px, so tablets remain unaffected.
    ========================================================================== */
 .rotate-overlay { display: none; }
-@media (orientation: landscape) and (max-width: 900px) and (hover: none) and (pointer: coarse) {
+@media (orientation: landscape) and (max-width: 980px) and (hover: none) and (pointer: coarse) {
   .app-shell { display: none; }
   .rotate-overlay {
     display: flex;

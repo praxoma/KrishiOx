@@ -27,6 +27,20 @@ Hindi-first wizard, and confirm the booking with **one tap into WhatsApp** via a
 
 ---
 
+## 📚 Documentation
+
+Deeper architectural docs live in [`docs/`](docs/):
+
+- [ARCHITECTURE.md](docs/ARCHITECTURE.md) — system overview, HTML/CSS/JS/PWA/service-worker design, tech debt
+- [PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) — folder layout and "what lives where"
+- [COMPONENTS.md](docs/COMPONENTS.md) — UI component inventory
+- [DATA_FLOW.md](docs/DATA_FLOW.md) — navigation, booking, WhatsApp, and update sequences
+- [DECISIONS.md](docs/DECISIONS.md) — why things are built the way they are
+- [DOMAIN_MODEL.md](docs/DOMAIN_MODEL.md) — conceptual domain model for future backend evolution
+- [COMPATIBILITY_REPORT.md](docs/COMPATIBILITY_REPORT.md) — Safari/Chrome/Firefox/Edge cross-browser review
+
+---
+
 ## 📁 Project structure
 
 ```
@@ -45,10 +59,21 @@ krishiox/
 ├── css/
 │   └── style.css           # Full design system (tokens, components, layout)
 ├── js/
-│   ├── config.js           # WhatsApp number, service catalogue, village list
-│   ├── icons.js             # Inline SVG icon library
-│   ├── main.js               # Header/nav rendering, WhatsApp helpers, SW registration
-│   └── booking.js            # Booking wizard state machine & WhatsApp message builder
+│   ├── branding.js          # Brand identity (appName, brandInitials, appTagline)
+│   ├── contact.js           # WhatsApp/call numbers, support hours, legal contact email
+│   ├── regions.js           # Service-area label
+│   ├── services.js          # Service catalogue
+│   ├── villages.js          # Village suggestion list
+│   ├── app.js                # Composes branding/contact/regions into KRISHIOX_CONFIG
+│   ├── storage.js            # localStorage wrapper
+│   ├── icons.js               # Inline SVG icon library
+│   ├── whatsapp.js             # wa.me deep-link builder
+│   ├── navigation.js            # Page identity + bottom nav
+│   ├── utils.js                  # Generic helpers (date formatting, clipboard, escaping)
+│   ├── ui.js                      # Shared UI chrome (header, footer, FAB, toast, consent, ...)
+│   ├── pwa.js                      # Service-worker registration, update handoff, install prompt
+│   ├── main.js                      # App bootstrap — composition root, boot sequence
+│   └── booking.js                    # Booking wizard state machine & WhatsApp message builder
 ├── icons/                   # Generated PWA icons (192/512, maskable, apple-touch, favicons)
 ├── robots.txt               # Crawler rules + sitemap pointer
 ├── sitemap.xml              # Indexable pages, for Google Search Console
@@ -86,8 +111,8 @@ live. Leave it in until you're ready to actually launch — see "Going live" bel
 ### Renaming the platform or changing the domain
 
 Everything JS-rendered (header, footer, WhatsApp message text, toasts) already reads the brand
-name from `js/config.js` — edit `appName` / `brandInitials` there and it updates everywhere at
-runtime, no other file needed.
+name from `js/branding.js` — edit `appName` / `brandInitials` there and it updates everywhere
+at runtime, no other file needed.
 
 What JS *can't* safely drive is the static SEO surface: `<title>`, meta description, canonical
 URL, Open Graph/Twitter tags, JSON-LD, and `manifest.json`. Those have to be real static text —
@@ -99,7 +124,7 @@ zero-dependency Node script (no `npm install` needed) that updates all of that i
 # See what's currently configured
 node dev/rebrand.js --status
 
-# Rename the platform everywhere (titles, OG tags, JSON-LD, manifest.json, config.js, README, ...)
+# Rename the platform everywhere (titles, OG tags, JSON-LD, manifest.json, branding.js, README, ...)
 node dev/rebrand.js --name "AgriSetu" --initials "AS"
 
 # Still testing, no domain yet — point every URL at your GitHub Pages address
@@ -144,9 +169,9 @@ tags naming the service area. `index.html` also carries a `Service` JSON-LD bloc
 full service catalogue) and `contact.html` carries `FAQPage` JSON-LD matching its visible FAQ —
 both are eligible for rich results in Google Search.
 
-- `js/config.js` → `KRISHIOX_VILLAGES` is the single source of truth for the area list (datalist
-  suggestions in the booking wizard, and the text used across About/Contact copy). Add new towns
-  there first.
+- `js/villages.js` → `KRISHIOX_VILLAGES` is the single source of truth for the area list
+  (datalist suggestions in the booking wizard, and the text used across About/Contact copy).
+  Add new towns there first.
 - `robots.txt` + `sitemap.xml` (repo root) list all indexable pages; `offline.html` is marked
   `noindex` permanently since it's just the service-worker fallback shell, not real content. The
   other 8 pages carry a *temporary* `noindex` too, until you run `--go-live` (see above).
@@ -174,16 +199,16 @@ a qualified lawyer before a real public launch** — they're a solid starting te
 advice.
 
 - **Not a cookie banner.** This app sets zero cookies (verified — grep for `document.cookie` comes
-  back empty), so the consent banner in `js/main.js` (`initConsentBanner`) is honestly scoped to
+  back empty), so the consent banner in `js/ui.js` (`initConsentBanner`) is honestly scoped to
   what's real: local storage usage and the WhatsApp hand-off, with links to the full policies.
   Building a generic "we use cookies" banner here would itself be a compliance problem — it'd be
   false.
-- **Versioned re-consent.** `KRISHIOX_CONFIG.legalVersion` (in `js/config.js`) is the single source
+- **Versioned re-consent.** `KRISHIOX_CONFIG.legalVersion` (in `js/app.js`) is the single source
   of truth. Bump it whenever `terms.html` or `privacy.html` changes materially — anyone whose saved
   consent doesn't match the current version sees the banner again automatically, with different
   copy ("policy updated" vs. first-time), instead of a stale acceptance silently carrying forward.
 - **"Clear my data"** on `privacy.html` removes exactly the keys the Privacy Policy says it does
-  (`clearAllKrishiOxData()` in `js/main.js`) — an explicit list, not a blanket `localStorage.clear()`,
+  (`clearAllKrishiOxData()` in `js/ui.js`) — an explicit list, not a blanket `localStorage.clear()`,
   so it stays auditable against what the page actually claims.
 - **Before real launch**, fill in `KRISHIOX_CONFIG.legalContactEmail` with a real, monitored inbox —
   it's shown on both legal pages and is expected for grievance redressal under India's Digital
@@ -195,23 +220,26 @@ advice.
 
 ## ⚙️ Configuration
 
-All deployment-specific values live in **`js/config.js`**:
+Deployment-specific values are split by concern across small files under `js/`, each with one
+job, and composed back together where the rest of the app still expects a single object — see
+`js/app.js`'s file-header comment for the full loading model. Quick map:
 
-```js
-const KRISHIOX_CONFIG = {
-  whatsappNumber: "919999999999",   // WhatsApp Business number, digits only, country code first
-  callNumber: "+919999999999",      // Displayed / dialled for the "Call" contact option
-  serviceArea: "सहारनपुर, उत्तर प्रदेश",
-  supportHours: "सुबह 6 बजे – रात 9 बजे (सातों दिन)",
-  ...
-};
-```
+| File | Holds |
+|---|---|
+| `js/branding.js` | `appName`, `brandInitials`, `appTagline` |
+| `js/contact.js` | `whatsappNumber`, `callNumber`, `supportHours`, `legalContactEmail` |
+| `js/regions.js` | `serviceArea` |
+| `js/services.js` | `KRISHIOX_SERVICES` — the service catalogue |
+| `js/villages.js` | `KRISHIOX_VILLAGES` — the village/area suggestion list |
+| `js/app.js` | Composes the three grouped objects above (plus `legalVersion`, which lives here) into `KRISHIOX_CONFIG` — the same merged shape every other module reads |
 
-**Update `whatsappNumber` and `callNumber` before going live.**
+**Update `whatsappNumber` and `callNumber` in `js/contact.js` before going live.**
 
-The service catalogue (`KRISHIOX_SERVICES`) and the village/area suggestion list
-(`KRISHIOX_VILLAGES`) are also defined in `config.js` — add, remove, or relabel entries there;
-every page (Home, Services, Booking) reads from this single source of truth.
+`KRISHIOX_SERVICES` and `KRISHIOX_VILLAGES` — add, remove, or relabel entries directly in
+`services.js` / `villages.js`; every page (Home, Services, Booking) reads from these as the
+single source of truth. Everything else (header, footer, WhatsApp helpers, the consent banner)
+reads the merged `KRISHIOX_CONFIG` from `js/app.js`, exactly as it did when all of this lived
+in one `config.js` file.
 
 ---
 
@@ -272,13 +300,13 @@ The codebase intentionally keeps a clean separation so these can be layered in w
 
 | Feature | Where it plugs in |
 |---|---|
-| **Vendor dashboard** | New `vendor/` section; `js/config.js` service catalogue is already data-driven |
+| **Vendor dashboard** | New `vendor/` section; `js/services.js`'s service catalogue is already data-driven |
 | **AI advisory** | New page + API call; `KRISHIOX_SERVICES` structure can extend with crop/advisory metadata |
 | **Weather** | A `js/weather.js` module + card on Home, backed by any public weather API |
-| **Marketplace** | `KRISHIOX_STORE` pattern in `config.js` can be extended into a product catalogue |
+| **Marketplace** | `KRISHIOX_SERVICES`-style catalogue pattern (a new `js/store.js`) can be extended into a product catalogue |
 | **Payments** | Booking wizard already isolates a single `confirmBooking()` step in `booking.js` — swap the WhatsApp handoff for a payment step without touching steps 1–5 |
 | **Equipment tracking** | `places_map`-style live map view, using the same design tokens in `style.css` |
-| **Analytics** | `KrishiOxStore` (in `config.js`) already writes a local booking history — swap for a real analytics/events endpoint |
+| **Analytics** | `KrishiOxStore` (in `js/storage.js`) already writes a local booking history — swap for a real analytics/events endpoint |
 
 ---
 

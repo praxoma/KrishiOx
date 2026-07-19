@@ -1,5 +1,6 @@
 /* ==========================================================================
    KrishiOx — Icon Library
+   Single responsibility: lookup of inline SVG icon markup.
    Lightweight inline SVGs (stroke-based, currentColor friendly).
    No external icon fonts/dependencies.
    ========================================================================== */
@@ -49,8 +50,12 @@ const KRISHIOX_ICONS = {
 };
 
 /**
- * Returns inline SVG markup for a given icon key.
+ * Returns inline SVG markup for a given icon key. Falls back to the "other"
+ * icon (three dots) for any unrecognized key rather than throwing, so a
+ * typo'd icon name degrades visually instead of breaking the page.
+ * @param {string} name - Icon key, e.g. "tractor", "whatsapp", "check".
+ * @returns {string} Inline SVG markup, safe to assign to `innerHTML`.
  */
-function krishiOxIcon(name) {
+export function krishiOxIcon(name) {
   return KRISHIOX_ICONS[name] || KRISHIOX_ICONS.other;
 }

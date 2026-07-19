@@ -1,47 +1,16 @@
 /* ==========================================================================
-   KrishiOx — Global Config
-   Edit these values to configure the deployment.
+   KrishiOx — Service Catalogue Configuration
+   Single responsibility: the master list of bookable services. Used on
+   Home (quick grid), Services (full catalogue), and Booking (step 1 +
+   step 3's unit label) — the single source of truth so adding, removing,
+   or relabeling a service only needs an edit here.
    ========================================================================== */
 
-const KRISHIOX_CONFIG = {
-  // WhatsApp business number in international format, no + or spaces.
-  whatsappNumber: "919015579855",
-
-  // Phone number for direct calling (tel: link)
-  callNumber: "+919015579855",
-
-  // Service area label shown across the app
-  serviceArea: "सहारनपुर, उत्तर प्रदेश",
-
-  // Support hours
-  supportHours: "सुबह 6 बजे – रात 9 बजे (सातों दिन)",
-
-  // --- Brand identity ---
-  // Everything JS-rendered (header, footer, toasts) reads from here, so
-  // changing the platform name only needs an edit here. Static SEO tags
-  // (<title>, meta description, canonical, Open Graph, JSON-LD, manifest.json)
-  // can't be JS-driven without hurting crawlers/link-preview bots that don't
-  // execute JavaScript — use dev/rebrand.js to update those in one command.
-  appName: "KrishiOx",
-  brandInitials: "KO",
-  appTagline: "खेती की सेवाएँ, समय पर बुकिंग",
-
-  // --- Legal / consent ---
-  // Bump legalVersion (any string, e.g. an ISO date) whenever terms.html or
-  // privacy.html changes in a way users should be re-notified about — the
-  // consent banner in main.js re-prompts anyone whose saved consent doesn't
-  // match this value, instead of silently assuming old consent still holds.
-  legalVersion: "2026-07-18.2",
-
-  // Grievance/contact inbox — required for grievance redressal under India's
-  // DPDP Act 2023, shown on privacy.html / terms.html. Set up as a free Zoho
-  // Mail mailbox on the krishiox.in domain — confirm it's actually receiving
-  // mail before --go-live.
-  legalContactEmail: "legal@krishiox.in"
-};
-
-// Master service catalogue — used on Home, Services, and Booking pages.
-const KRISHIOX_SERVICES = [
+/**
+ * Master service catalogue.
+ * @type {Array<{id: string, nameHi: string, nameEn: string, desc: string, icon: string, unit: string}>}
+ */
+export const KRISHIOX_SERVICES = [
   {
     id: "tractor",
     nameHi: "ट्रैक्टर सेवा",
@@ -131,40 +100,3 @@ const KRISHIOX_SERVICES = [
     unit: "विवरण दें"
   }
 ];
-
-// Common villages / areas around Saharanpur — shown as datalist suggestions.
-const KRISHIOX_VILLAGES = [
-  "बांदूखेड़ी (Bandukheri)",
-  "फंदपुरी (Phandpuri)",
-  "परसौली (Parasauli)",
-  "बिजना खेड़ी (Bijna Kheri)",
-  "दैदनौर (Daid Naur)",
-  "ठाठ खेड़ी (Thath Kheri)",
-  "खजूर हेड़ी (Khazoor Heri)",
-  "चक मछेर हेड़ी (Chak Machher Heri)",
-  "मच्छड़ हेड़ी (Machhar Heri)",
-  "सुभानपुरा (Subhanpura)",
-  "मोहिउद्दीनपुर (Mohiuddinpur)",
-  "कालरी (Kalri)",
-  "बुधन माजरा (Budhan Mazra)",
-  "जजवा (Jajwa)",
-  "चौखेड़ी (Chaukheri)",
-  "जगेता नजीब (Jageta Najib)"
-];
-
-// Persist app-wide small state in localStorage safely.
-const KrishiOxStore = {
-  get(key, fallback) {
-    try {
-      const v = localStorage.getItem("krishiox:" + key);
-      return v === null ? fallback : JSON.parse(v);
-    } catch (e) {
-      return fallback;
-    }
-  },
-  set(key, value) {
-    try {
-      localStorage.setItem("krishiox:" + key, JSON.stringify(value));
-    } catch (e) { /* storage unavailable — ignore */ }
-  }
-};
