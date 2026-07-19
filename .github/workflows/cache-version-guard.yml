@@ -1,0 +1,56 @@
+name: Cache version guard
+
+# Catches exactly the mistake that shipped a real about.html change with no
+# way for any browser to ever discover it: a precached file (any page,
+# css/style.css, or js/*.js) changed but sw.js's CACHE_VERSION didn't move,
+# so the service worker's update check has nothing to detect. Rather than
+# relying on remembering to run `node dev/bump_cache.js` by hand every time
+# (already forgotten twice), this auto-bumps it and pushes the fix back.
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  guard:
+    if: github.event.head_commit.author.name != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Resolve comparison base
+        id: base
+        run: |
+          BEFORE="${{ github.event.before }}"
+          if [ "$BEFORE" = "0000000000000000000000000000000000000000" ] || [ -z "$BEFORE" ]; then
+            BEFORE=$(git rev-list --max-parents=0 HEAD)
+          fi
+          echo "sha=$BEFORE" >> "$GITHUB_OUTPUT"
+
+      - name: Check CACHE_VERSION
+        id: check
+        run: |
+          if node dev/check_cache_version.js "${{ steps.base.outputs.sha }}" "${{ github.sha }}"; then
+            echo "needs_bump=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "needs_bump=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Auto-bump CACHE_VERSION
+        if: steps.check.outputs.needs_bump == 'true'
+        run: |
+          node dev/bump_cache.js
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add sw.js
+          git commit -m "Auto-bump CACHE_VERSION (precached file changed without a manual bump)"
+          git push origin HEAD:main

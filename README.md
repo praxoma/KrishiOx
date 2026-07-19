@@ -257,6 +257,13 @@ dev tools. `js/main.js` already auto-detects the new `CACHE_VERSION` on a return
 app-foreground and reloads them onto it automatically — the bump is what makes that mechanism
 have something new to find.
 
+**This step has already been forgotten twice** (a real commit shipped a page change with no
+version bump, so no browser ever found out), so it's no longer just a documented convention —
+`.github/workflows/cache-version-guard.yml` runs on every push to `main`, checks whether any
+precached file changed without `CACHE_VERSION` moving alongside it, and if so auto-commits the
+bump itself and pushes it. It's a safety net, not a replacement for running the script yourself —
+it just means forgetting no longer silently ships a stale site.
+
 ---
 
 ## 🔭 Built for future expansion
