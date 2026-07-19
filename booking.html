@@ -24,6 +24,35 @@
 <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<!-- Preload the full js/main.js + js/booking.js module graph in parallel —
+     without this, the browser discovers these files one dependency level
+     at a time (fetch main.js, parse it, fetch what it imports, parse
+     those, ...), costing several extra network round trips before the
+     booking wizard can respond to a tap. This page's list is bigger than
+     the other pages' because it also loads the booking engine (js/booking/*).
+     Keep this list in sync with main.js's and booking.js's imports (see
+     those files themselves and PERFORMANCE.md for how to check). -->
+<link rel="modulepreload" href="js/main.js">
+<link rel="modulepreload" href="js/booking.js">
+<link rel="modulepreload" href="js/app.js">
+<link rel="modulepreload" href="js/booking/delivery-adapter.js">
+<link rel="modulepreload" href="js/booking/engine.js">
+<link rel="modulepreload" href="js/booking/model.js">
+<link rel="modulepreload" href="js/booking/serializer.js">
+<link rel="modulepreload" href="js/booking/validator.js">
+<link rel="modulepreload" href="js/booking/whatsapp-delivery-adapter.js">
+<link rel="modulepreload" href="js/branding.js">
+<link rel="modulepreload" href="js/contact.js">
+<link rel="modulepreload" href="js/icons.js">
+<link rel="modulepreload" href="js/navigation.js">
+<link rel="modulepreload" href="js/pwa.js">
+<link rel="modulepreload" href="js/regions.js">
+<link rel="modulepreload" href="js/services.js">
+<link rel="modulepreload" href="js/storage.js">
+<link rel="modulepreload" href="js/ui.js">
+<link rel="modulepreload" href="js/utils.js">
+<link rel="modulepreload" href="js/villages.js">
+<link rel="modulepreload" href="js/whatsapp.js">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>

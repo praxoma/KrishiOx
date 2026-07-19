@@ -25,6 +25,24 @@
 <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<!-- Preload the full js/main.js module graph in parallel — without this,
+     the browser discovers these files one dependency level at a time
+     (fetch main.js, parse it, fetch what it imports, parse those, ...),
+     costing several extra network round trips before anything can run.
+     Keep this list in sync with main.js's imports (see js/main.js itself
+     and PERFORMANCE.md for how to check). -->
+<link rel="modulepreload" href="js/main.js">
+<link rel="modulepreload" href="js/app.js">
+<link rel="modulepreload" href="js/branding.js">
+<link rel="modulepreload" href="js/contact.js">
+<link rel="modulepreload" href="js/icons.js">
+<link rel="modulepreload" href="js/navigation.js">
+<link rel="modulepreload" href="js/pwa.js">
+<link rel="modulepreload" href="js/regions.js">
+<link rel="modulepreload" href="js/services.js">
+<link rel="modulepreload" href="js/storage.js">
+<link rel="modulepreload" href="js/ui.js">
+<link rel="modulepreload" href="js/whatsapp.js">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>

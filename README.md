@@ -39,6 +39,7 @@ Deeper architectural docs live in [`docs/`](docs/):
 - [DOMAIN_MODEL.md](docs/DOMAIN_MODEL.md) — conceptual domain model for future backend evolution
 - [COMPATIBILITY_REPORT.md](docs/COMPATIBILITY_REPORT.md) — Safari/Chrome/Firefox/Edge cross-browser review
 - [ACCESSIBILITY.md](docs/ACCESSIBILITY.md) — accessibility audit (semantic HTML, ARIA, keyboard, contrast, headings)
+- [PERFORMANCE.md](docs/PERFORMANCE.md) — performance review (JS/CSS loading, caching, PWA precaching, critical rendering path)
 
 ---
 

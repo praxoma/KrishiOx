@@ -31,7 +31,7 @@
      cached, without waiting on About/Terms/Privacy to finish first too.
    ========================================================================== */
 
-const CACHE_VERSION = "krishiox-v11";
+const CACHE_VERSION = "krishiox-v12";
 const STATIC_CACHE = CACHE_VERSION + "-static";
 const NAV_TIMEOUT_MS = 4000;
 
