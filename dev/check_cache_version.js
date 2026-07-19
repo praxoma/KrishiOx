@@ -29,13 +29,16 @@ function sh(cmd) {
 const swPath = path.join(__dirname, "..", "sw.js");
 const swContent = fs.readFileSync(swPath, "utf8");
 
-const shellMatch = swContent.match(/const APP_SHELL = \[([\s\S]*?)\];/);
-if (!shellMatch) {
-  console.log("Could not find APP_SHELL in sw.js — skipping check.");
+// sw.js precaches in two tiers (APP_SHELL_CORE, APP_SHELL_EXTRA) — match
+// both array literals and combine their entries into one file list.
+const shellMatches = Array.from(swContent.matchAll(/const APP_SHELL_\w+ = \[([\s\S]*?)\];/g));
+if (shellMatches.length === 0) {
+  console.log("Could not find APP_SHELL_CORE/APP_SHELL_EXTRA in sw.js — skipping check.");
   process.exit(0);
 }
-// APP_SHELL entries look like "./index.html" — strip the quotes and leading "./".
-const appShellFiles = Array.from(shellMatch[1].matchAll(/"\.\/(.*?)"/g))
+// Entries look like "./index.html" — strip the quotes and leading "./".
+const appShellFiles = shellMatches
+  .flatMap(function (m) { return Array.from(m[1].matchAll(/"\.\/(.*?)"/g)); })
   .map(function (m) { return m[1]; })
   .filter(Boolean);
 

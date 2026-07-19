@@ -18,22 +18,30 @@
      "SKIP_WAITING" message from the page. That message only gets sent once
      the user taps the header's update icon, so a farmer mid-way through the
      booking wizard is never yanked onto a fresh reload without asking.
+   - Two-tier precache: CORE (the pages/scripts a farmer is actually likely
+     to need in the next few taps — Home, Services, Booking + its full
+     engine, Partners, Contact, the shared shell) is fetched first; EXTRA
+     (About, Terms, Privacy, the larger 512px icon — lower-traffic,
+     informational pages) only starts once CORE finishes. Both tiers still
+     run as background work after the current page has already loaded (see
+     js/pwa.js's initServiceWorker, which registers on window "load"), so
+     neither tier ever competes with what the farmer is looking at right
+     now — CORE-first just means that if the farmer taps "बुक करें" a few
+     seconds later, booking.html and everything it needs is already likely
+     cached, without waiting on About/Terms/Privacy to finish first too.
    ========================================================================== */
 
-const CACHE_VERSION = "krishiox-v10";
+const CACHE_VERSION = "krishiox-v11";
 const STATIC_CACHE = CACHE_VERSION + "-static";
 const NAV_TIMEOUT_MS = 4000;
 
-const APP_SHELL = [
+const APP_SHELL_CORE = [
   "./",
   "./index.html",
   "./services.html",
   "./booking.html",
   "./partners.html",
-  "./about.html",
   "./contact.html",
-  "./terms.html",
-  "./privacy.html",
   "./offline.html",
   "./manifest.json",
   "./css/style.css",
@@ -59,8 +67,14 @@ const APP_SHELL = [
   "./js/booking/whatsapp-delivery-adapter.js",
   "./js/booking/engine.js",
   "./icons/icon-192.png",
-  "./icons/icon-512.png",
   "./icons/apple-touch-icon.png"
+];
+
+const APP_SHELL_EXTRA = [
+  "./about.html",
+  "./terms.html",
+  "./privacy.html",
+  "./icons/icon-512.png"
 ];
 
 self.addEventListener("install", function (event) {
@@ -70,8 +84,12 @@ self.addEventListener("install", function (event) {
       // on a flaky rural connection, one timed-out asset shouldn't sink the whole
       // precache and leave the farmer with zero offline support.
       return Promise.allSettled(
-        APP_SHELL.map(function (url) { return cache.add(url); })
-      );
+        APP_SHELL_CORE.map(function (url) { return cache.add(url); })
+      ).then(function () {
+        return Promise.allSettled(
+          APP_SHELL_EXTRA.map(function (url) { return cache.add(url); })
+        );
+      });
     })
     // No self.skipWaiting() here on purpose — the new worker sits fully
     // precached and "waiting" until the page explicitly asks it to take
