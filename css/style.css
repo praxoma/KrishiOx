@@ -1243,3 +1243,5 @@ footer.site-footer strong { color: var(--copper); }
   .rotate-overlay-icon svg { width: 56px; height: 56px; stroke: var(--gold); transform: rotate(90deg); }
   .rotate-overlay p { max-width: 260px; font-size: 15px; font-weight: 600; }
 }
+
+/* end of design system */
