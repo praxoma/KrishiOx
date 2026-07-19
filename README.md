@@ -238,10 +238,24 @@ directly.
 
 ## 🔌 Offline support
 
-`sw.js` precaches the full app shell (all six pages, CSS, JS, icons) on first visit. Subsequent
+`sw.js` precaches the full app shell (all pages, CSS, JS, icons) on first visit. Subsequent
 visits — including with no signal — will serve cached pages instantly; any page that isn't yet
 cached falls back to `offline.html`. Cache busting is controlled by bumping `CACHE_VERSION` in
 `sw.js` on each deploy.
+
+**Before every commit that touches any HTML page, `css/style.css`, or any `js/*.js` file**, run:
+
+```bash
+node dev/bump_cache.js
+```
+
+This increments `CACHE_VERSION` in `sw.js` (e.g. `krishiox-v2` -> `krishiox-v3`). Skipping this is
+the single most common way to ship a fix that returning users don't actually see — without a
+version bump, an already-installed service worker keeps its cache-first strategy serving the old
+file, and a real user has no easy way to force a refresh the way you can with your own browser's
+dev tools. `js/main.js` already auto-detects the new `CACHE_VERSION` on a returning user's next
+app-foreground and reloads them onto it automatically — the bump is what makes that mechanism
+have something new to find.
 
 ---
 

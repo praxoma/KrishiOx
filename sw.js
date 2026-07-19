@@ -15,7 +15,7 @@
      the latest version onto a device that already has the PWA installed.
    ========================================================================== */
 
-const CACHE_VERSION = "krishiox-v1";
+const CACHE_VERSION = "krishiox-v2";
 const STATIC_CACHE = CACHE_VERSION + "-static";
 const NAV_TIMEOUT_MS = 4000;
 
