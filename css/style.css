@@ -929,7 +929,13 @@ input, select, textarea { font-family: inherit; }
 @media (min-width: 560px) {
   body { background: #E7E2D8; }
   .app-shell { box-shadow: 0 0 60px rgba(0,0,0,0.15); }
-  .site-header, .bottom-nav, .fab-whatsapp, .consent-banner { left: 50%; transform: translateX(-50%); right: auto; }
+  /* .site-header is excluded here on purpose — it's position:sticky, not
+     fixed, so it already centers correctly via its own max-width+margin:auto
+     (inherited from being inside .app-shell). Applying this fixed-element
+     centering trick to it would shift an already-centered sticky element
+     sideways by the transform alone, since sticky ignores left/right for
+     layout but transform still applies. */
+  .bottom-nav, .fab-whatsapp, .consent-banner { left: 50%; transform: translateX(-50%); right: auto; }
   .fab-whatsapp { transform: translateX(calc(280px - 56px - 16px)); }
 }
 
