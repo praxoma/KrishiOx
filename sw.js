@@ -11,11 +11,16 @@
    - Static assets: cache-first, revalidate in background (unchanged — this
      is already the fast option under poor connectivity).
    - Cache versioning: bump CACHE_VERSION to invalidate old caches on deploy.
-     Combined with the auto-update logic in js/main.js, this is what forces
-     the latest version onto a device that already has the PWA installed.
+     Combined with the update logic in js/main.js, this is what makes a new
+     version available to a device that already has the PWA installed.
+   - Update handoff: a new worker installs and precaches in the background
+     but does NOT skipWaiting() automatically — it waits for an explicit
+     "SKIP_WAITING" message from the page. That message only gets sent once
+     the user taps the header's update icon, so a farmer mid-way through the
+     booking wizard is never yanked onto a fresh reload without asking.
    ========================================================================== */
 
-const CACHE_VERSION = "krishiox-v2";
+const CACHE_VERSION = "krishiox-v3";
 const STATIC_CACHE = CACHE_VERSION + "-static";
 const NAV_TIMEOUT_MS = 4000;
 
@@ -50,10 +55,16 @@ self.addEventListener("install", function (event) {
       return Promise.allSettled(
         APP_SHELL.map(function (url) { return cache.add(url); })
       );
-    }).then(function () {
-      return self.skipWaiting();
     })
+    // No self.skipWaiting() here on purpose — the new worker sits fully
+    // precached and "waiting" until the page explicitly asks it to take
+    // over (see the message listener below), instead of forcing every open
+    // tab onto it immediately.
   );
+});
+
+self.addEventListener("message", function (event) {
+  if (event.data === "SKIP_WAITING") self.skipWaiting();
 });
 
 self.addEventListener("activate", function (event) {

@@ -79,10 +79,12 @@
       '<button type="button" id="checkUpdateBtn" class="footer-update-btn">नवीनतम अपडेट जांचें</button>';
   }
 
-  /* ---- Manual "check for update" (belt-and-braces alongside the automatic
-     background check on visibilitychange) — mainly so users have a visible
-     way to confirm they're on the latest version instead of just trusting
-     it happened silently. */
+  /* ---- Manual "check for update" — belt-and-braces alongside the automatic
+     background check on visibilitychange. Reuses the same detection as the
+     header update icon (updateRegistration below) rather than applying an
+     update itself, so behavior stays consistent: this button only ever
+     surfaces the header icon or reports "already latest", it never forces
+     a reload on its own. */
   function initCheckUpdateButton() {
     const btn = document.getElementById("checkUpdateBtn");
     if (!btn) return;
@@ -90,15 +92,12 @@
     btn.addEventListener("click", function () {
       navigator.serviceWorker.getRegistration().then(function (reg) {
         if (!reg) { showToast("अपडेट सेवा उपलब्ध नहीं है"); return; }
+        if (updateRegistration) { showToast("नया अपडेट पहले से तैयार है — ऊपर आइकन दबाएं"); return; }
         showToast("नवीनतम जांच रहे हैं...");
-        let updated = false;
-        navigator.serviceWorker.addEventListener("controllerchange", function onCC() {
-          updated = true;
-        }, { once: true });
         reg.update().then(function () {
           setTimeout(function () {
-            if (!updated) showToast("आप पहले से नवीनतम संस्करण पर हैं ✓");
-          }, 2500);
+            showToast(updateRegistration ? "नया अपडेट मिला! ऊपर आइकन दबाएं" : "आप पहले से नवीनतम संस्करण पर हैं ✓");
+          }, 2000);
         }).catch(function () {
           showToast("जांच नहीं हो सकी — नेटवर्क जांचें");
         });
@@ -116,6 +115,7 @@
         '<span class="brand-text"><strong>' + KRISHIOX_CONFIG.appName + '</strong><span>' + KRISHIOX_CONFIG.serviceArea + "</span></span>" +
       "</a>" +
       '<div class="header-actions">' +
+        '<button type="button" class="header-action header-action-update" id="updateBtn" aria-label="नया अपडेट उपलब्ध है — लगाने के लिए दबाएं" style="display:none;">' + krishiOxIcon("refresh") + "</button>" +
         '<button type="button" class="header-action header-action-install" id="installBtn" aria-label="ऐप इंस्टॉल करें" style="display:none;">' + krishiOxIcon("install") + "</button>" +
         '<button type="button" class="header-action text-size-btn" id="textSizeBtn" aria-label="टेक्स्ट का आकार बड़ा करें">A+</button>' +
         '<a class="header-action header-action-call" href="tel:' + KRISHIOX_CONFIG.callNumber + '" aria-label="कॉल करें">' + krishiOxIcon("phone") + "</a>" +
@@ -271,14 +271,56 @@
     update();
   }
 
-  /* ---- Service Worker registration + forced update delivery ----
+  /* ---- Service Worker registration + tap-to-update ----
      There's no app store to push updates through, so a new deploy has to
-     reach already-installed PWAs on its own. sw.js calls skipWaiting() as
-     soon as a new version installs; here we detect that handover and
-     reload automatically so the farmer is never stuck on stale code.
-     The `hadController` guard stops this from firing (and reloading) on a
-     brand-new first-ever visit, where there's no real "update" happening —
-     only on a genuine version change for a returning visitor. */
+     reach already-installed PWAs on its own. A new worker precaches itself
+     in the background but deliberately does NOT take over automatically
+     (see sw.js) — it sits "waiting" until the header's update icon is
+     tapped, which posts it a message to finish activating. This means a
+     farmer mid-way through the booking wizard never gets yanked onto a
+     fresh reload without asking; the update simply sits ready until they
+     choose to take it (or until their next natural, idle page load).
+     The `hadController` guard on the reload-after-activation listener stops
+     it firing on a brand-new first-ever visit, where there's no real
+     "update" happening — only on a genuine version change for a returning
+     visitor who (or whose browser) triggered the handover. */
+  let updateRegistration = null; // set once a new version is confirmed ready — read by the header icon and the footer's manual check
+
+  function showUpdateIcon(reg) {
+    if (updateRegistration) return;
+    updateRegistration = reg;
+    const btn = document.getElementById("updateBtn");
+    if (btn) btn.style.display = "inline-flex";
+  }
+
+  function watchForUpdates(reg) {
+    // Covers the case where an update finished downloading in a background
+    // tab before this page even loaded.
+    if (reg.waiting && navigator.serviceWorker.controller) showUpdateIcon(reg);
+
+    reg.addEventListener("updatefound", function () {
+      const newWorker = reg.installing;
+      if (!newWorker) return;
+      newWorker.addEventListener("statechange", function () {
+        // "installed" + an existing controller = a genuine update just
+        // finished precaching, not the very first install on a new visit.
+        if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+          showUpdateIcon(reg);
+        }
+      });
+    });
+  }
+
+  function initUpdateButton() {
+    const btn = document.getElementById("updateBtn");
+    if (!btn) return;
+    btn.addEventListener("click", function () {
+      if (!updateRegistration || !updateRegistration.waiting || btn.disabled) return;
+      btn.disabled = true;
+      updateRegistration.waiting.postMessage("SKIP_WAITING");
+    });
+  }
+
   function initServiceWorker() {
     if (!("serviceWorker" in navigator)) return;
     window.addEventListener("load", function () {
@@ -297,6 +339,7 @@
       // "no change" for up to 10 minutes even though a new version was just
       // pushed. Forcing "none" means every check is a real network request.
       navigator.serviceWorker.register("sw.js", { updateViaCache: "none" }).then(function (reg) {
+        watchForUpdates(reg);
         // The browser's own update check can lag on a poor connection;
         // re-check whenever the app comes back to the foreground.
         document.addEventListener("visibilitychange", function () {
@@ -352,6 +395,7 @@
     initFaq();
     initOfflineBanner();
     initInstallButton();
+    initUpdateButton();
     initCheckUpdateButton();
     initTextSize();
     notifyIfJustUpdated();
