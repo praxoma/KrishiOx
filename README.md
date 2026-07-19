@@ -38,6 +38,7 @@ Deeper architectural docs live in [`docs/`](docs/):
 - [DECISIONS.md](docs/DECISIONS.md) — why things are built the way they are
 - [DOMAIN_MODEL.md](docs/DOMAIN_MODEL.md) — conceptual domain model for future backend evolution
 - [COMPATIBILITY_REPORT.md](docs/COMPATIBILITY_REPORT.md) — Safari/Chrome/Firefox/Edge cross-browser review
+- [ACCESSIBILITY.md](docs/ACCESSIBILITY.md) — accessibility audit (semantic HTML, ARIA, keyboard, contrast, headings)
 
 ---
 

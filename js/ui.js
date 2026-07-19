@@ -215,6 +215,11 @@ export function initConsentBanner() {
   const banner = document.createElement("div");
   banner.id = "consentBanner";
   banner.className = "consent-banner";
+  // role="region" (not "status"/"alert") because this holds interactive
+  // controls (Accept button, policy links), not just an announcement —
+  // "status"/"alert" are reserved for non-interactive live regions.
+  banner.setAttribute("role", "region");
+  banner.setAttribute("aria-label", "सहमति सूचना");
   banner.innerHTML =
     "<p>" + message + "</p>" +
     '<div class="consent-actions">' +
@@ -248,6 +253,11 @@ export function showToast(msg, duration) {
     toast = document.createElement("div");
     toast.id = "krishiOxToast";
     toast.className = "toast";
+    // Screen readers otherwise never learn a toast appeared — validation
+    // errors, copy confirmation, and update notices would be silent to
+    // anyone not looking at the screen at that exact moment.
+    toast.setAttribute("role", "status");
+    toast.setAttribute("aria-live", "polite");
     document.body.appendChild(toast);
   }
   toast.textContent = msg;
@@ -273,9 +283,14 @@ export function initFaq() {
     q.addEventListener("click", function () {
       const wasOpen = item.classList.contains("open");
       document.querySelectorAll(".faq-item.open").forEach(function (openItem) {
-        if (openItem !== item) openItem.classList.remove("open");
+        if (openItem !== item) {
+          openItem.classList.remove("open");
+          const openQ = openItem.querySelector(".faq-q");
+          if (openQ) openQ.setAttribute("aria-expanded", "false");
+        }
       });
       item.classList.toggle("open", !wasOpen);
+      q.setAttribute("aria-expanded", String(!wasOpen));
     });
   });
 }

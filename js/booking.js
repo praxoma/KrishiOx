@@ -83,8 +83,9 @@ function renderServiceGrid() {
   const grid = document.getElementById("bookingServiceGrid");
   let html = "";
   KRISHIOX_SERVICES.forEach(function (s) {
-    const sel = s.id === state.serviceId ? " selected" : "";
-    html += '<button type="button" class="service-card' + sel + '" data-service="' + s.id + '">' +
+    const isSelected = s.id === state.serviceId;
+    const sel = isSelected ? " selected" : "";
+    html += '<button type="button" class="service-card' + sel + '" data-service="' + s.id + '" aria-pressed="' + isSelected + '">' +
       '<span class="check-badge">' + krishiOxIcon("check") + '</span>' +
       '<span class="icon-wrap">' + krishiOxIcon(s.icon) + '</span>' +
       '<span class="s-name-hi">' + s.nameHi + '</span>' +
@@ -111,7 +112,7 @@ function renderVillageStep() {
   const chipsWrap = document.getElementById("villageChips");
   let chipHtml = "";
   KRISHIOX_VILLAGES.slice(0, 6).forEach(function (v) {
-    chipHtml += '<button type="button" class="chip" data-village="' + v + '">' + v.split(" (")[0] + "</button>";
+    chipHtml += '<button type="button" class="chip" data-village="' + v + '" aria-pressed="false">' + v.split(" (")[0] + "</button>";
   });
   chipsWrap.innerHTML = chipHtml;
 
@@ -139,7 +140,9 @@ function renderVillageStep() {
 
 function syncVillageChips() {
   document.querySelectorAll("#villageChips .chip").forEach(function (chip) {
-    chip.classList.toggle("selected", chip.getAttribute("data-village") === state.village);
+    const isSelected = chip.getAttribute("data-village") === state.village;
+    chip.classList.toggle("selected", isSelected);
+    chip.setAttribute("aria-pressed", String(isSelected));
   });
 }
 
@@ -192,7 +195,7 @@ function renderDateStep() {
   ];
   let chipHtml = "";
   options.forEach(function (opt) {
-    chipHtml += '<button type="button" class="chip" data-offset="' + opt.offset + '">' + opt.label + "</button>";
+    chipHtml += '<button type="button" class="chip" data-offset="' + opt.offset + '" aria-pressed="false">' + opt.label + "</button>";
   });
   chipsWrap.innerHTML = chipHtml;
 
@@ -229,7 +232,9 @@ function syncDateChips() {
     const offset = parseInt(chip.getAttribute("data-offset"), 10);
     const d = new Date();
     d.setDate(d.getDate() + offset);
-    chip.classList.toggle("selected", isoDate(d) === state.date);
+    const isSelected = isoDate(d) === state.date;
+    chip.classList.toggle("selected", isSelected);
+    chip.setAttribute("aria-pressed", String(isSelected));
   });
 }
 
@@ -284,7 +289,7 @@ function renderSummary() {
 function row(label, value, editStep) {
   return '<div class="summary-row">' +
     '<span class="s-label">' + label + '</span>' +
-    '<span class="s-value">' + escapeHtml(value) + '<br><a class="s-edit" data-edit="' + editStep + '">बदलें</a></span>' +
+    '<span class="s-value">' + escapeHtml(value) + '<br><button type="button" class="s-edit" data-edit="' + editStep + '">बदलें</button></span>' +
   '</div>';
 }
 
@@ -315,6 +320,18 @@ function showStep(step) {
   if (activeStepEl) activeStepEl.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
+// Moves keyboard/screen-reader focus to the newly shown step's heading
+// (tabindex="-1" in booking.html makes it programmatically focusable
+// without adding it to the tab order). Only called from goToStep(), i.e.
+// on an actual step transition — never on the page's initial render, so a
+// fresh page load still starts focus at the top of the document like
+// every other page in the app.
+function focusStepHeading(step) {
+  const stepEl = document.querySelector('.wizard-step[data-step="' + step + '"]');
+  const heading = stepEl && stepEl.querySelector(".wizard-step-title");
+  if (heading) heading.focus();
+}
+
 function goToStep(step) {
   state.step = Math.min(TOTAL_STEPS, Math.max(1, step));
   saveDraft();
@@ -324,6 +341,7 @@ function goToStep(step) {
   updateStepLabels();
   updateNavButtons();
   updateNextButtonState();
+  focusStepHeading(state.step);
 }
 
 function goNext() {
@@ -397,6 +415,8 @@ function confirmBooking() {
 
   document.getElementById("wizardWrap").style.display = "none";
   document.getElementById("successWrap").style.display = "block";
+  const successHeading = document.querySelector("#successWrap h2");
+  if (successHeading) successHeading.focus();
 
   // Persist last booking locally (for future "my bookings" expansion)
   const history = KrishiOxStore.get("bookingHistory", []);

@@ -29,12 +29,13 @@
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<div class="offline-banner" id="offlineBanner">आप ऑफ़लाइन हैं — कुछ जानकारी सीमित हो सकती है</div>
+<div class="offline-banner" id="offlineBanner" role="status" aria-live="polite">आप ऑफ़लाइन हैं — कुछ जानकारी सीमित हो सकती है</div>
 
 <div class="app-shell">
   <header class="site-header" id="siteHeader"></header>
 
   <main class="page" id="bookingPage">
+    <h1 class="sr-only">सेवा बुक करें</h1>
 
     <div id="wizardWrap">
       <div class="wizard-progress" id="wizardProgress"></div>
@@ -42,43 +43,43 @@
       <!-- STEP 1: SERVICE -->
       <section class="wizard-step active" data-step="1">
         <div class="wizard-step-label">Step 1 / 6</div>
-        <h2 class="wizard-step-title">कौन सी सेवा चाहिए?</h2>
+        <h2 class="wizard-step-title" tabindex="-1">कौन सी सेवा चाहिए?</h2>
         <div class="service-grid" id="bookingServiceGrid"></div>
       </section>
 
       <!-- STEP 2: VILLAGE -->
       <section class="wizard-step" data-step="2">
         <div class="wizard-step-label">Step 2 / 6</div>
-        <h2 class="wizard-step-title">आपका गाँव / क्षेत्र</h2>
+        <h2 class="wizard-step-title" tabindex="-1">आपका गाँव / क्षेत्र</h2>
         <div class="form-group">
-          <label class="form-label">गाँव का नाम <span class="req">*</span></label>
+          <label class="form-label" for="villageInput">गाँव का नाम <span class="req">*</span></label>
           <input class="input" list="villageList" id="villageInput" placeholder="जैसे: बांदूखेड़ी" autocomplete="off">
           <datalist id="villageList"></datalist>
           <p class="form-hint">सूची में न हो तो सीधे टाइप करें</p>
         </div>
         <div class="form-group">
-          <label class="form-label">तेज़ चयन</label>
-          <div class="chip-row" id="villageChips"></div>
+          <label class="form-label" id="villageChipsLabel">तेज़ चयन</label>
+          <div class="chip-row" id="villageChips" role="group" aria-labelledby="villageChipsLabel"></div>
         </div>
       </section>
 
       <!-- STEP 3: AREA / QUANTITY -->
       <section class="wizard-step" data-step="3">
         <div class="wizard-step-label">Step 3 / 6</div>
-        <h2 class="wizard-step-title" id="quantityTitle">कितना क्षेत्रफल?</h2>
+        <h2 class="wizard-step-title" id="quantityTitle" tabindex="-1">कितना क्षेत्रफल?</h2>
         <div class="form-group">
           <label class="form-label" id="quantityLabel">मात्रा चुनें</label>
-          <div class="qty-stepper">
+          <div class="qty-stepper" role="group" aria-labelledby="quantityLabel">
             <button type="button" class="qty-btn" id="qtyMinus" aria-label="कम करें">−</button>
             <div>
-              <div class="qty-value" id="qtyValue">1</div>
+              <div class="qty-value" id="qtyValue" aria-live="polite">1</div>
               <span class="qty-unit" id="qtyUnit">बीघा</span>
             </div>
             <button type="button" class="qty-btn" id="qtyPlus" aria-label="बढ़ाएँ">+</button>
           </div>
         </div>
         <div class="form-group" id="otherDetailsGroup" style="display:none;">
-          <label class="form-label">अपनी आवश्यकता बताएं <span class="req">*</span></label>
+          <label class="form-label" for="otherDetailsInput">अपनी आवश्यकता बताएं <span class="req">*</span></label>
           <textarea class="textarea" id="otherDetailsInput" placeholder="जैसे: बीज बुवाई मशीन चाहिए..."></textarea>
         </div>
       </section>
@@ -86,13 +87,13 @@
       <!-- STEP 4: DATE -->
       <section class="wizard-step" data-step="4">
         <div class="wizard-step-label">Step 4 / 6</div>
-        <h2 class="wizard-step-title">पसंदीदा तारीख</h2>
+        <h2 class="wizard-step-title" tabindex="-1">पसंदीदा तारीख</h2>
         <div class="form-group">
-          <label class="form-label">तेज़ चयन</label>
-          <div class="chip-row" id="dateChips"></div>
+          <label class="form-label" id="dateChipsLabel">तेज़ चयन</label>
+          <div class="chip-row" id="dateChips" role="group" aria-labelledby="dateChipsLabel"></div>
         </div>
         <div class="form-group">
-          <label class="form-label">या तारीख चुनें <span class="req">*</span></label>
+          <label class="form-label" for="dateInput">या तारीख चुनें <span class="req">*</span></label>
           <input class="input" type="date" id="dateInput">
         </div>
       </section>
@@ -100,18 +101,18 @@
       <!-- STEP 5: REMARKS + CONTACT -->
       <section class="wizard-step" data-step="5">
         <div class="wizard-step-label">Step 5 / 6</div>
-        <h2 class="wizard-step-title">अतिरिक्त जानकारी</h2>
+        <h2 class="wizard-step-title" tabindex="-1">अतिरिक्त जानकारी</h2>
         <div class="form-group">
-          <label class="form-label">आपका नाम <span class="req">*</span></label>
+          <label class="form-label" for="nameInput">आपका नाम <span class="req">*</span></label>
           <input class="input" id="nameInput" placeholder="जैसे: सुरेश कुमार" autocomplete="off">
         </div>
         <div class="form-group">
-          <label class="form-label">मोबाइल नंबर</label>
+          <label class="form-label" for="phoneInput">मोबाइल नंबर</label>
           <input class="input" id="phoneInput" type="tel" inputmode="numeric" maxlength="10" placeholder="10 अंकों का मोबाइल नंबर" autocomplete="off">
           <p class="form-hint">वैकल्पिक — WhatsApp आपके अपने नंबर से ही भेजा जाएगा</p>
         </div>
         <div class="form-group">
-          <label class="form-label">विशेष टिप्पणी (Remarks)</label>
+          <label class="form-label" for="remarksInput">विशेष टिप्पणी (Remarks)</label>
           <textarea class="textarea" id="remarksInput" placeholder="कोई विशेष जानकारी हो तो यहाँ लिखें (वैकल्पिक)"></textarea>
         </div>
       </section>
@@ -119,7 +120,7 @@
       <!-- STEP 6: CONFIRM -->
       <section class="wizard-step" data-step="6">
         <div class="wizard-step-label">Step 6 / 6</div>
-        <h2 class="wizard-step-title">बुकिंग की पुष्टि करें</h2>
+        <h2 class="wizard-step-title" tabindex="-1">बुकिंग की पुष्टि करें</h2>
         <div class="card">
           <div class="summary-list" id="summaryList"></div>
         </div>
@@ -138,7 +139,7 @@
     <!-- SUCCESS STATE (shown after WhatsApp confirm tap) -->
     <div id="successWrap" class="success-wrap" style="display:none;">
       <div class="success-icon" id="successIcon"></div>
-      <h2>बुकिंग विवरण तैयार है!</h2>
+      <h2 tabindex="-1">बुकिंग विवरण तैयार है!</h2>
       <p>WhatsApp खोलकर संदेश भेजें — हमारी टीम जल्द ही आपसे संपर्क करेगी।</p>
       <div style="margin-top:28px;display:flex;flex-direction:column;gap:12px;">
         <a class="btn btn-whatsapp" id="successWaBtn" target="_blank" rel="noopener"></a>

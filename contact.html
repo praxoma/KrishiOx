@@ -62,7 +62,7 @@
 </script>
 </head>
 <body>
-<div class="offline-banner" id="offlineBanner">आप ऑफ़लाइन हैं — कुछ जानकारी सीमित हो सकती है</div>
+<div class="offline-banner" id="offlineBanner" role="status" aria-live="polite">आप ऑफ़लाइन हैं — कुछ जानकारी सीमित हो सकती है</div>
 
 <div class="app-shell">
   <header class="site-header" id="siteHeader"></header>
@@ -81,12 +81,12 @@
     <section class="section">
       <a class="contact-method wa" id="waContactRow" target="_blank" rel="noopener">
         <span class="icon-wrap"></span>
-        <div class="cm-body"><h4>WhatsApp पर संदेश भेजें</h4><span>तुरंत जवाब पाएँ</span></div>
+        <div class="cm-body"><h2>WhatsApp पर संदेश भेजें</h2><span>तुरंत जवाब पाएँ</span></div>
         <span class="cm-go"></span>
       </a>
       <a class="contact-method call" id="callContactRow">
         <span class="icon-wrap"></span>
-        <div class="cm-body"><h4>कॉल करें</h4><span id="callNumberText"></span></div>
+        <div class="cm-body"><h2>कॉल करें</h2><span id="callNumberText"></span></div>
         <span class="cm-go"></span>
       </a>
     </section>
@@ -95,24 +95,24 @@
       <div class="section-head"><div><span class="tag">FAQ</span><h2>अक्सर पूछे जाने वाले सवाल</h2></div></div>
       <div class="card" style="padding:6px 20px;">
         <div class="faq-item">
-          <div class="faq-q"><span>क्या बुकिंग के लिए भुगतान पहले करना होगा?</span><span id="faqIcon1"></span></div>
-          <div class="faq-a">नहीं, KrishiOx पर बुकिंग के लिए किसी भी अग्रिम भुगतान की आवश्यकता नहीं है। भुगतान सेवा प्रदाता से सीधे तय होता है।</div>
+          <button type="button" class="faq-q" aria-expanded="false" aria-controls="faqAnswer1"><span>क्या बुकिंग के लिए भुगतान पहले करना होगा?</span><span id="faqIcon1"></span></button>
+          <div class="faq-a" id="faqAnswer1">नहीं, KrishiOx पर बुकिंग के लिए किसी भी अग्रिम भुगतान की आवश्यकता नहीं है। भुगतान सेवा प्रदाता से सीधे तय होता है।</div>
         </div>
         <div class="faq-item">
-          <div class="faq-q"><span>क्या ऐप में लॉगिन ज़रूरी है?</span><span id="faqIcon2"></span></div>
-          <div class="faq-a">नहीं, KrishiOx पर बुकिंग हेतु किसी लॉगिन या रजिस्ट्रेशन की आवश्यकता नहीं है। सीधे WhatsApp से बुकिंग करें।</div>
+          <button type="button" class="faq-q" aria-expanded="false" aria-controls="faqAnswer2"><span>क्या ऐप में लॉगिन ज़रूरी है?</span><span id="faqIcon2"></span></button>
+          <div class="faq-a" id="faqAnswer2">नहीं, KrishiOx पर बुकिंग हेतु किसी लॉगिन या रजिस्ट्रेशन की आवश्यकता नहीं है। सीधे WhatsApp से बुकिंग करें।</div>
         </div>
         <div class="faq-item">
-          <div class="faq-q"><span>बुकिंग के बाद क्या होगा?</span><span id="faqIcon3"></span></div>
-          <div class="faq-a">आपकी बुकिंग जानकारी WhatsApp पर भेजते ही हमारी टीम या नज़दीकी पार्टनर आपसे संपर्क कर पुष्टि करेगा।</div>
+          <button type="button" class="faq-q" aria-expanded="false" aria-controls="faqAnswer3"><span>बुकिंग के बाद क्या होगा?</span><span id="faqIcon3"></span></button>
+          <div class="faq-a" id="faqAnswer3">आपकी बुकिंग जानकारी WhatsApp पर भेजते ही हमारी टीम या नज़दीकी पार्टनर आपसे संपर्क कर पुष्टि करेगा।</div>
         </div>
         <div class="faq-item">
-          <div class="faq-q"><span>क्या मैं बुकिंग रद्द कर सकता हूँ?</span><span id="faqIcon4"></span></div>
-          <div class="faq-a">हाँ, बुकिंग रद्द करने या समय बदलने के लिए बस WhatsApp पर हमें सूचित करें।</div>
+          <button type="button" class="faq-q" aria-expanded="false" aria-controls="faqAnswer4"><span>क्या मैं बुकिंग रद्द कर सकता हूँ?</span><span id="faqIcon4"></span></button>
+          <div class="faq-a" id="faqAnswer4">हाँ, बुकिंग रद्द करने या समय बदलने के लिए बस WhatsApp पर हमें सूचित करें।</div>
         </div>
         <div class="faq-item">
-          <div class="faq-q"><span>सेवा किन क्षेत्रों में उपलब्ध है?</span><span id="faqIcon5"></span></div>
-          <div class="faq-a">वर्तमान में सहारनपुर क्षेत्र के प्रमुख गाँवों में सेवा उपलब्ध है। नए क्षेत्र लगातार जोड़े जा रहे हैं।</div>
+          <button type="button" class="faq-q" aria-expanded="false" aria-controls="faqAnswer5"><span>सेवा किन क्षेत्रों में उपलब्ध है?</span><span id="faqIcon5"></span></button>
+          <div class="faq-a" id="faqAnswer5">वर्तमान में सहारनपुर क्षेत्र के प्रमुख गाँवों में सेवा उपलब्ध है। नए क्षेत्र लगातार जोड़े जा रहे हैं।</div>
         </div>
       </div>
     </section>

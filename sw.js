@@ -20,7 +20,7 @@
      booking wizard is never yanked onto a fresh reload without asking.
    ========================================================================== */
 
-const CACHE_VERSION = "krishiox-v9";
+const CACHE_VERSION = "krishiox-v10";
 const STATIC_CACHE = CACHE_VERSION + "-static";
 const NAV_TIMEOUT_MS = 4000;
 

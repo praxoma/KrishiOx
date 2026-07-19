@@ -53,9 +53,18 @@ const KRISHIOX_ICONS = {
  * Returns inline SVG markup for a given icon key. Falls back to the "other"
  * icon (three dots) for any unrecognized key rather than throwing, so a
  * typo'd icon name degrades visually instead of breaking the page.
+ *
+ * Every icon is purely decorative — every call site either places it next
+ * to visible text (nav items, service cards) or inside a control that
+ * already carries its own `aria-label` (header buttons, the FAB). So every
+ * icon is marked `aria-hidden="true" focusable="false"` here, once,
+ * instead of screen readers potentially trying to describe raw SVG
+ * markup that adds nothing a sighted user's adjacent label doesn't
+ * already say.
  * @param {string} name - Icon key, e.g. "tractor", "whatsapp", "check".
  * @returns {string} Inline SVG markup, safe to assign to `innerHTML`.
  */
 export function krishiOxIcon(name) {
-  return KRISHIOX_ICONS[name] || KRISHIOX_ICONS.other;
+  const svg = KRISHIOX_ICONS[name] || KRISHIOX_ICONS.other;
+  return svg.replace("<svg ", '<svg aria-hidden="true" focusable="false" ');
 }
