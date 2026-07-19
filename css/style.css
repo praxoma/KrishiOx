@@ -942,14 +942,19 @@ input, select, textarea { font-family: inherit; }
 @media (min-width: 560px) {
   body { background: #E7E2D8; }
   .app-shell { box-shadow: 0 0 60px rgba(0,0,0,0.15); }
-  /* .site-header is excluded here on purpose — it's position:sticky, not
-     fixed, so it already centers correctly via its own max-width+margin:auto
-     (inherited from being inside .app-shell). Applying this fixed-element
-     centering trick to it would shift an already-centered sticky element
-     sideways by the transform alone, since sticky ignores left/right for
-     layout but transform still applies. */
-  .bottom-nav, .fab-whatsapp, .consent-banner { left: 50%; transform: translateX(-50%); right: auto; }
-  .fab-whatsapp { transform: translateX(calc(280px - 56px - 16px)); }
+  /* Only .fab-whatsapp needs help here. .site-header (sticky), .bottom-nav,
+     and .consent-banner are excluded on purpose — all three already center
+     correctly on their own via left:0; right:0; max-width; margin:0 auto,
+     which unambiguously produces a 560px box at any viewport width without
+     needing a transform. Previously all four were bundled into one
+     left:50%/transform:translateX(-50%) rule meant for .fab-whatsapp (whose
+     base rule anchors asymmetrically via right:16px with no left, so it
+     doesn't self-center) — applying that same trick to the other three
+     broke them in two different ways: .site-header and .consent-banner's
+     transform stacked on TOP of their already-correct centering and shoved
+     them sideways, while .bottom-nav lost its paired left+right anchor
+     entirely and shrank to fit its content instead of holding 560px. */
+  .fab-whatsapp { left: 50%; right: auto; transform: translateX(calc(280px - 56px - 16px)); }
 }
 
 /* ==========================================================================
