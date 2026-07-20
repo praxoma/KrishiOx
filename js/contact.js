@@ -17,13 +17,13 @@
  */
 export const KRISHIOX_CONTACT = {
   // WhatsApp business number in international format, no + or spaces.
-  whatsappNumber: "919015579855",
+  whatsappNumber: "919520040503",
 
   // Phone number for direct calling (tel: link)
-  callNumber: "+919015579855",
+  callNumber: "+919520040503",
 
   // Support hours, shown on the Contact page
-  supportHours: "सुबह 6 बजे – रात 9 बजे (सातों दिन)",
+  supportHours: "सुबह 7 बजे – रात 7 बजे (सातों दिन)",
 
   // Grievance/contact inbox — required for grievance redressal under India's
   // DPDP Act 2023, shown on privacy.html / terms.html. Set up as a free Zoho
