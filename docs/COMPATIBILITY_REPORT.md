@@ -56,7 +56,7 @@ mechanisms with no known per-browser quirks.
 ## 2. Telephone links
 
 ✅ **Compliant.** `tel:` links (`js/ui.js`'s header call button, `contact.html`'s call row) use
-`KRISHIOX_CONFIG.callNumber` (`+919015579855`) — no spaces or punctuation beyond the leading
+`KRISHIOX_CONFIG.callNumber` (`+91 9520040503`) — no spaces or punctuation beyond the leading
 `+`, the safest format for `tel:` across every browser/OS combination, including older WebViews
 that are stricter about accepted characters. No fix needed.
 

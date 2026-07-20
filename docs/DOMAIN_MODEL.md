@@ -127,7 +127,7 @@ a separate `booking_status_events` table for the audit trail (see §11).
 ```json
 {
   "id": "bkg_01HZX3QK9F",
-  "farmerId": "frm_9015579855",
+  "farmerId": "frm_9520040503",
   "serviceId": "tractor",
   "machineId": null,
   "partnerId": null,
@@ -135,7 +135,7 @@ a separate `booking_status_events` table for the audit trail (see §11).
   "quantity": { "value": 3, "unit": "बीघा (Bigha)" },
   "otherDetails": null,
   "date": "2026-07-22",
-  "contact": { "name": "सुरेश कुमार", "phone": "9812345670" },
+  "contact": { "name": "सुरेश कुमार", "phone": "9520040503" },
   "remarks": "सुबह जल्दी चाहिए",
   "status": "submitted",
   "createdAt": "2026-07-19T10:32:00+05:30",
@@ -657,8 +657,8 @@ be changed on the strength of this document alone.
 **JSON representation** *(reflects current `KRISHIOX_CONFIG` shape closely)*:
 ```json
 {
-  "whatsappNumber": "919015579855",
-  "callNumber": "+919015579855",
+  "whatsappNumber": "919520040503",
+  "callNumber": "+919520040503",
   "serviceArea": "सहारनपुर, उत्तर प्रदेश",
   "supportHours": "सुबह 6 बजे – रात 9 बजे (सातों दिन)",
   "appName": "KrishiOx",
